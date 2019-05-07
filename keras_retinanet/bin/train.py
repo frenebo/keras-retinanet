@@ -412,6 +412,7 @@ def parse_args(args):
     parser.add_argument('--config',           help='Path to a configuration parameters .ini file.')
     parser.add_argument('--weighted-average', help='Compute the mAP using the weighted average of precisions among classes.', action='store_true')
     parser.add_argument('--compute-val-loss', help='Compute validation loss during training', dest='compute_val_loss', action='store_true')
+    parser.add_argument('--from-weights',     help='directory to load weights from', type=str, default=None)
 
     # Fit generator arguments
     parser.add_argument('--workers', help='Number of multiprocessing workers. To disable multiprocessing, set workers to 0', type=int, default=1)
@@ -470,14 +471,25 @@ def main(args=None):
             config=args.config
         )
 
+    if args.from_weights is not None:
+        import os
+        print("Loading from weights directory")
+
+        weights_list = []
+        for filename in sorted(os.listdir(args.from_weights)):
+            layer_weights = np.load(os.path.join(args.from_weights, filename))
+            weights_list.append(layer_weights)
+
+        model.set_weights(weights_list)
+
     # print model summary
-    print(model.summary())
+    # print(model.summary())
 
-    import numpy as np
-    for i, layer_weights in enumerate(model.get_weights()):
-        np.save("kr/{}_weights".format(i), layer_weights)
+    # import numpy as np
+    # for i, layer_weights in enumerate(model.get_weights()):
+    #     np.save("kr/{}_weights".format(i), layer_weights)
 
-    exit(0)
+    # exit(0)
 
     # this lets the generator compute backbone layer shapes using the actual backbone model
     if 'vgg' in args.backbone or 'densenet' in args.backbone:
