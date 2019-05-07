@@ -330,7 +330,16 @@ class Generator(keras.utils.Sequence):
         """
         Keras sequence method for generating batches.
         """
+        # try:
+        # except AttributeError as ex:
+        #     self.
+
         group = self.groups[index]
         inputs, targets = self.compute_input_output(group)
+        finput = inputs[0]
+        ftarget = targets[0]
+
+        np.save("kr_generator/input_{0:03d}".format(index), finput)
+        np.save("kr_generator/output_{0:03d}".format(index), ftarget)
 
         return inputs, targets
