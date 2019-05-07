@@ -87,6 +87,8 @@ class Generator(keras.utils.Sequence):
         if self.shuffle_groups:
             self.on_epoch_end()
 
+        self.cnt = 0
+
     def on_epoch_end(self):
         if self.shuffle_groups:
             random.shuffle(self.groups)
@@ -330,12 +332,6 @@ class Generator(keras.utils.Sequence):
         """
         Keras sequence method for generating batches.
         """
-        try:
-            self.cnt += 1
-        except AttributeError as ex:
-            self.cnt = 0
-            print("Attribute error: ", str(ex))
-        print(self.cnt)
 
         group = self.groups[index]
         inputs, targets = self.compute_input_output(group)
@@ -344,5 +340,7 @@ class Generator(keras.utils.Sequence):
 
         np.save("kr_generator/input_{0:03d}".format(self.cnt), finput)
         np.save("kr_generator/output_{0:03d}".format(self.cnt), ftarget)
+
+        self.cnt += 1
 
         return inputs, targets
