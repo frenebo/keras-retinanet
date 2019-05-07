@@ -337,9 +337,9 @@ class Generator(keras.utils.Sequence):
         finput = inputs[0]
         ftarget = targets[0]
 
-        np.save("kr_generator/input_{0:03d}".format(TrainingGenerator.cnt), finput)
-        np.save("kr_generator/output_{0:03d}".format(TrainingGenerator.cnt), ftarget)
+        np.save("kr_generator/input_{0:03d}".format(Generator.cnt), finput)
+        np.save("kr_generator/output_{0:03d}".format(Generator.cnt), ftarget)
 
-        TrainingGenerator.cnt += 1
+        Generator.cnt += 1
 
         return inputs, targets
