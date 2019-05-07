@@ -39,6 +39,7 @@ from ..utils.transform import transform_aabb
 class Generator(keras.utils.Sequence):
     """ Abstract generator class.
     """
+    cnt = 0
 
     def __init__(
         self,
@@ -86,8 +87,6 @@ class Generator(keras.utils.Sequence):
         # Shuffle when initializing
         if self.shuffle_groups:
             self.on_epoch_end()
-
-        self.cnt = 0
 
     def on_epoch_end(self):
         if self.shuffle_groups:
@@ -338,9 +337,9 @@ class Generator(keras.utils.Sequence):
         finput = inputs[0]
         ftarget = targets[0]
 
-        np.save("kr_generator/input_{0:03d}".format(self.cnt), finput)
-        np.save("kr_generator/output_{0:03d}".format(self.cnt), ftarget)
+        np.save("kr_generator/input_{0:03d}".format(TrainingGenerator.cnt), finput)
+        np.save("kr_generator/output_{0:03d}".format(TrainingGenerator.cnt), ftarget)
 
-        self.cnt += 1
+        TrainingGenerator.cnt += 1
 
         return inputs, targets
