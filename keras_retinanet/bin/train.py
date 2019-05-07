@@ -193,16 +193,16 @@ def create_callbacks(model, training_model, prediction_model, validation_generat
         checkpoint = RedirectModel(checkpoint, model)
         callbacks.append(checkpoint)
 
-    callbacks.append(keras.callbacks.ReduceLROnPlateau(
-        monitor    = 'loss',
-        factor     = 0.1,
-        patience   = 2,
-        verbose    = 1,
-        mode       = 'auto',
-        min_delta  = 0.0001,
-        cooldown   = 0,
-        min_lr     = 0
-    ))
+    # callbacks.append(keras.callbacks.ReduceLROnPlateau(
+    #     monitor    = 'loss',
+    #     factor     = 0.1,
+    #     patience   = 2,
+    #     verbose    = 1,
+    #     mode       = 'auto',
+    #     min_delta  = 0.0001,
+    #     cooldown   = 0,
+    #     min_lr     = 0
+    # ))
 
     return callbacks
 
@@ -237,7 +237,8 @@ def create_generators(args, preprocess_image):
             flip_y_chance=0.5,
         )
     else:
-        transform_generator = random_transform_generator(flip_x_chance=0.5)
+        transform_generator = None
+        # transform_generator = random_transform_generator(flip_x_chance=0.5)
 
     if args.dataset_type == 'coco':
         # import here to prevent unnecessary dependency on cocoapi
@@ -471,6 +472,12 @@ def main(args=None):
 
     # print model summary
     print(model.summary())
+
+    import numpy as np
+    for i, layer_weights in enumerate(model.get_weights()):
+        np.save("kr/{}_weights".format(i), layer_weights)
+
+    exit(0)
 
     # this lets the generator compute backbone layer shapes using the actual backbone model
     if 'vgg' in args.backbone or 'densenet' in args.backbone:
