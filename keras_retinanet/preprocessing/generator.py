@@ -334,7 +334,7 @@ class Generator(keras.utils.Sequence):
             self.cnt += 1
         except AttributeError as ex:
             self.cnt = 0
-            print("Attribute error")
+            print("Attribute error: ", str(ex))
         print(self.cnt)
 
         group = self.groups[index]
