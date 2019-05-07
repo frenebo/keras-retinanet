@@ -473,6 +473,7 @@ def main(args=None):
 
     if args.from_weights is not None:
         import os
+        import numpy as np
         print("Loading from weights directory")
 
         weights_list = []
