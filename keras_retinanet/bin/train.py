@@ -516,6 +516,13 @@ def main(args=None):
     if not args.compute_val_loss:
         validation_generator = None
 
+    names = [weight.name + "{0:03d}".format(i) for layer in model.layers for i, weight in enumerate(layer.weights)]
+    weights = model.get_weights()
+
+    for name, weight in zip(names, weights):
+        np.save("named_kr/" + name, weight)
+        # print(name, weight.shape)
+
     # start training
     return training_model.fit_generator(
         generator=train_generator,
