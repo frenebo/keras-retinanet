@@ -519,7 +519,7 @@ def main(args=None):
     names = [weight.name + "{0:03d}".format(i) for layer in model.layers for i, weight in enumerate(layer.weights)]
     # weights = model.get_weights()
 
-    with open("kr_weightnames", "w") as file:
+    with open("kr_weightnames.txt", "w") as file:
         for name in names:
             file.write(name + "\n")
 
