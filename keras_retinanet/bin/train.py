@@ -18,6 +18,7 @@ limitations under the License.
 
 import argparse
 import os
+import numpy as np
 import sys
 import warnings
 
@@ -472,8 +473,6 @@ def main(args=None):
         )
 
     if args.from_weights is not None:
-        import os
-        import numpy as np
         print("Loading from weights directory")
 
         weights_list = []
@@ -522,12 +521,11 @@ def main(args=None):
     # with open("kr_weightnames.txt", "w") as file:
     #     for name in names:
     #         file.write(name + "\n")
-    import os
     def save_model_weights(savemodel, dirname):
         for layer in savemodel.layers:
             if isinstance(layer, keras.models.Model):
                 submodel_dir = os.path.join(dirname, layer.name)
-                save_model(layer, submodel_dir)
+                save_model_weights(layer, submodel_dir)
             else:
                 layer_dir_path = os.path.join(dirname, layer.name)
                 os.makedirs(layer_dir_path, exist_ok=True)
