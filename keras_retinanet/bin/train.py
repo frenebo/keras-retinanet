@@ -535,6 +535,8 @@ def main(args=None):
                     np.save(file_path_without_extension, weight)
 
     save_model_weights(model, "kr_weights")
+
+    model.save("kr_model.h5")
     # with open("kr_layernames.txt", "w") as file:
     #     for layer in model.layers:
     #         file.write(layer.name + "\n")
