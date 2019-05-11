@@ -530,7 +530,7 @@ def main(args=None):
                 save_model(layer, submodel_dir)
             else:
                 layer_dir_path = os.path.join(dirname, layer.name)
-                os.makedirs(layer_dir_path)
+                os.makedirs(layer_dir_path, exist_ok=True)
 
                 for i, weight in enumerate(layer.get_weights()):
                     file_path_without_extension = os.path.join(layer_dir_path, str(i))
