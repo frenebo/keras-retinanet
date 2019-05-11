@@ -522,9 +522,24 @@ def main(args=None):
     # with open("kr_weightnames.txt", "w") as file:
     #     for name in names:
     #         file.write(name + "\n")
-    with open("kr_layernames.txt", "w") as file:
-        for layer in model.layers:
-            file.write(layer.name + "\n")
+    import os
+    def save_model(savemodel, dirname):
+        for layer in savemodel.layers:
+            if isinstance(layer, keras.models.Model):
+                submodel_dir = os.path.join(dirname, layer.name)
+                save_model(layer, submodel_dir)
+            else:
+                layer_dir_path = os.path.join(dirname, layer.name)
+                os.makedirs(layer_dir_path)
+
+                for i, weight in enumerate(layer.get_weights()):
+                    file_path_without_extension = os.path.join(layer_dir_path, str(i))
+                    np.save(os.path.join(file_path_without_extension, weight))
+
+    save_model(model, "re_weights")
+    # with open("kr_layernames.txt", "w") as file:
+    #     for layer in model.layers:
+    #         file.write(layer.name + "\n")
 
     exit(0)
 
