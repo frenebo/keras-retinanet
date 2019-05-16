@@ -334,8 +334,8 @@ class Generator(keras.utils.Sequence):
 
         group = self.groups[index]
         inputs, targets = self.compute_input_output(group)
-        finput = inputs[0]
-        ftarget = targets[0]
+        finput = inputs
+        ftarget = targets
 
         print("SAVING keras-retinanet ====================================")
         np.save("kr_generator/input_{0:03d}".format(Generator.cnt), finput)
