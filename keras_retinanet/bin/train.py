@@ -401,7 +401,7 @@ def parse_args(args):
     parser.add_argument('--multi-gpu-force',  help='Extra flag needed to enable (experimental) multi-gpu support.', action='store_true')
     parser.add_argument('--epochs',           help='Number of epochs to train.', type=int, default=50)
     parser.add_argument('--steps',            help='Number of steps per epoch.', type=int, default=10000)
-    parser.add_argument('--lr',               help='Learning rate.', type=float, default=1e-5)
+    parser.add_argument('--lr',               help='Learning rate.', type=float, default=1e-1)
     parser.add_argument('--snapshot-path',    help='Path to store snapshots of models during training (defaults to \'./snapshots\')', default='./snapshots')
     parser.add_argument('--tensorboard-dir',  help='Log directory for Tensorboard output', default='./logs')
     parser.add_argument('--no-snapshots',     help='Disable saving snapshots.', dest='snapshots', action='store_false')
