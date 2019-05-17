@@ -346,9 +346,9 @@ class Generator(keras.utils.Sequence):
         # for item in ftarget:
         #     print("Item shape: ", item.shape)
 
-        np.save("kr_generator/input_{0:03d}".format(Generator.cnt), finput)
-        np.save("kr_generator/box_output_{0:03d}".format(Generator.cnt), box_target)
-        np.save("kr_generator/class_output_{0:03d}".format(Generator.cnt), class_target)
+        # np.save("kr_generator/input_{0:03d}".format(Generator.cnt), finput)
+        # np.save("kr_generator/box_output_{0:03d}".format(Generator.cnt), box_target)
+        # np.save("kr_generator/class_output_{0:03d}".format(Generator.cnt), class_target)
 
         Generator.cnt += 1
 
