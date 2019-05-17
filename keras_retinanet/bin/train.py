@@ -549,7 +549,7 @@ def main(args=None):
 
 
     intermediate_model = keras.models.Model(inputs=training_model.inputs,
-        outputs=[training_model.layers[25], training_model[150]])
+        outputs=[training_model.layers[25], training_model.layers[150]])
     for i in range(training_generator.__len__()):
         pred25, pred150 = intermediate_model.predict(training_generator.__getitem__(i))
         np.save("kr_middle_layers/pred25", pred25)
