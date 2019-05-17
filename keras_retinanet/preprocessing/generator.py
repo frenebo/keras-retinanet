@@ -334,12 +334,21 @@ class Generator(keras.utils.Sequence):
 
         group = self.groups[index]
         inputs, targets = self.compute_input_output(group)
-        finput = inputs
-        ftarget = targets
+        finput = inputs[0]
+        box_target = targets[0]
+        class_target = targets[1]
 
-        print("SAVING keras-retinanet ====================================")
-        np.save("kr_generator/input_{0:03d}".format(Generator.cnt), finput)
-        np.save("kr_generator/output_{0:03d}".format(Generator.cnt), ftarget)
+        # print("SAVING retinanet_easy=================================================================")
+        # # print()
+
+        # print(type(ftarget))
+        # print(len(ftarget))
+        # for item in ftarget:
+        #     print("Item shape: ", item.shape)
+
+        np.save("kr_generator/input_{0:03d}".format(TrainingGenerator.cnt), finput)
+        np.save("kr_generator/box_output_{0:03d}".format(TrainingGenerator.cnt), box_target)
+        np.save("kr_generator/class_output_{0:03d}".format(TrainingGenerator.cnt), class_target)
 
         Generator.cnt += 1
 
