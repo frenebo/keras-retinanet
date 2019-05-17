@@ -401,7 +401,7 @@ def parse_args(args):
     parser.add_argument('--multi-gpu-force',  help='Extra flag needed to enable (experimental) multi-gpu support.', action='store_true')
     parser.add_argument('--epochs',           help='Number of epochs to train.', type=int, default=50)
     parser.add_argument('--steps',            help='Number of steps per epoch.', type=int, default=10000)
-    parser.add_argument('--lr',               help='Learning rate.', type=float, default=1e-1)
+    parser.add_argument('--lr',               help='Learning rate.', type=float, default=1e-5)
     parser.add_argument('--snapshot-path',    help='Path to store snapshots of models during training (defaults to \'./snapshots\')', default='./snapshots')
     parser.add_argument('--tensorboard-dir',  help='Log directory for Tensorboard output', default='./logs')
     parser.add_argument('--no-snapshots',     help='Disable saving snapshots.', dest='snapshots', action='store_false')
@@ -416,7 +416,7 @@ def parse_args(args):
     parser.add_argument('--config',           help='Path to a configuration parameters .ini file.')
     parser.add_argument('--weighted-average', help='Compute the mAP using the weighted average of precisions among classes.', action='store_true')
     parser.add_argument('--compute-val-loss', help='Compute validation loss during training', dest='compute_val_loss', action='store_true')
-    parser.add_argument('--from-weights',     help='directory to load weights from', type=str, default=None)
+    # parser.add_argument('--from-weights',     help='directory to load weights from', type=str, default=None)
 
     # Fit generator arguments
     parser.add_argument('--workers', help='Number of multiprocessing workers. To disable multiprocessing, set workers to 0', type=int, default=1)
@@ -475,15 +475,15 @@ def main(args=None):
             config=args.config
         )
 
-    if args.from_weights is not None:
-        print("Loading from weights directory")
+    # if args.from_weights is not None:
+    #     print("Loading from weights directory")
 
-        weights_list = []
-        for filename in sorted(os.listdir(args.from_weights)):
-            layer_weights = np.load(os.path.join(args.from_weights, filename))
-            weights_list.append(layer_weights)
+    #     weights_list = []
+    #     for filename in sorted(os.listdir(args.from_weights)):
+    #         layer_weights = np.load(os.path.join(args.from_weights, filename))
+    #         weights_list.append(layer_weights)
 
-        model.set_weights(weights_list)
+    #     model.set_weights(weights_list)
 
     # print model summary
     # print(model.summary())
@@ -574,7 +574,7 @@ def main(args=None):
         validation_data=validation_generator
     )
 
-    save_model_weights(training_model, "kr_weights")
+    # save_model_weights(training_model, "kr_weights")
 
     return final_results
 
