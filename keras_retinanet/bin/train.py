@@ -552,7 +552,7 @@ def main(args=None):
         outputs=[training_model.layers[25].output, training_model.layers[150].output])
     for i in range(train_generator.__len__()):
         in_val = train_generator.__getitem__(i)[0]
-        pred25, pred150 = intermediate_model.predict(in_val)[0]
+        pred25, pred150 = intermediate_model.predict(in_val)
         np.save("kr_middle_layers/pred25", pred25)
         np.save("kr_middle_layers/pred150", pred150)
 
