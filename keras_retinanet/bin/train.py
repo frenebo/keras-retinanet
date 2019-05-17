@@ -559,7 +559,7 @@ def main(args=None):
     # exit(0)
 
     # start training
-    return training_model.fit_generator(
+    final_results =  training_model.fit_generator(
         generator=train_generator,
         steps_per_epoch=args.steps,
         epochs=args.epochs,
@@ -572,6 +572,8 @@ def main(args=None):
     )
 
     save_model_weights(training_model, "kr_weights")
+
+    return final_results
 
 
 if __name__ == '__main__':
