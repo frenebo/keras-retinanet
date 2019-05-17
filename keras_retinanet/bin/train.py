@@ -547,6 +547,16 @@ def main(args=None):
         # np.save("named_kr/" + name, weight)
         # print(name, weight.shape)
 
+
+    intermediate_model = keras.models.Model(inputs=training_model.inputs,
+        outputs=[training_model.layers[25], training_model[150]])
+    for i in range(training_generator.__len__()):
+        pred25, pred150 = intermediate_model.predict(training_generator.__getitem__(i))
+        np.save("kr_middle_layers/pred25", pred25)
+        np.save("kr_middle_layers/pred150", pred150)
+
+    exit(0)
+
     # start training
     return training_model.fit_generator(
         generator=train_generator,
