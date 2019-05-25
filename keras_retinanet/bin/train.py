@@ -133,7 +133,7 @@ def create_models(backbone_retinanet, num_classes, weights, multi_gpu=0,
         training_model = model
 
     # make prediction model
-    prediction_model = retinanet_bbox(model=model, anchor_params=anchor_params)
+    prediction_model = retinanet_bbox(model=model, anchor_params=anchor_params, using_direction=args.using_direction)
 
     loss = {
         'regression'    : losses.smooth_l1(),
@@ -497,7 +497,7 @@ def main(args=None):
         anchor_params    = None
         if args.config and 'anchor_parameters' in args.config:
             anchor_params = parse_anchor_parameters(args.config)
-        prediction_model = retinanet_bbox(model=model, anchor_params=anchor_params)
+        prediction_model = retinanet_bbox(model=model, anchor_params=anchor_params, using_direction=args.using_direction)
     else:
         weights = args.weights
         # default to imagenet if nothing else is specified

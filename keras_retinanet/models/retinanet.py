@@ -290,6 +290,7 @@ def retinanet_bbox(
     class_specific_filter = True,
     name                  = 'retinanet-bbox',
     anchor_params         = None,
+    using_direction       = False,
     **kwargs
 ):
     """ Construct a RetinaNet model on top of a backbone and adds convenience functions to output boxes directly.
@@ -348,7 +349,10 @@ def retinanet_bbox(
         name                  = 'filtered_detections'
     )([boxes, classification] + other)
 
-    print("============================================================================", other[0].shape)
+    if using_direction:
+        detections = detections[:3] + [layers.Argmax(axis=-1)(detections[3])] + detections[4:]
+
+    # print("============================================================================", other[0].shape)
 
     # construct the model
     return keras.models.Model(inputs=model.inputs, outputs=detections, name=name)
