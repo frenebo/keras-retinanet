@@ -333,7 +333,4 @@ class Generator(keras.utils.Sequence):
         group = self.groups[index]
         inputs, targets = self.compute_input_output(group)
 
-        for i, target in enumerate(targets):
-            np.save("{}_target".format(i), target)
-
         return inputs, targets
