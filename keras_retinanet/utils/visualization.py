@@ -74,6 +74,9 @@ def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None
     """
     selection = np.where(scores > score_threshold)[0]
 
+    if using_direction:
+        print("Directions: ", directions)
+
     for i in selection:
         c = color if color is not None else label_color(labels[i])
         draw_box(image, boxes[i, :], color=c)
@@ -81,7 +84,6 @@ def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None
         # draw labels
         caption = (label_to_name(labels[i]) if label_to_name else labels[i]) + ': {0:.2f}'.format(scores[i])
 
-        print("Directions: ", directions)
         if using_direction:
             caption += " " + label_to_direction_name(directions[i])
 
