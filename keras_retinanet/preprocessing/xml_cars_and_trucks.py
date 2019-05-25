@@ -139,9 +139,9 @@ def north_south_anchor_targets_bbox(
             directions_batch[index, indices, -1] = -1
             regression_batch[index, indices, -1] = -1
 
-    print("regression_batch: ", regression_batch.shape)
-    print("labels_batch: ", labels_batch)
-    print("directions_batch: ", directions_batch)
+    # print("regression_batch: ", regression_batch.shape)
+    # print("labels_batch: ", labels_batch)
+    # print("directions_batch: ", directions_batch)
 
     return regression_batch, labels_batch, directions_batch
 

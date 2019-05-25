@@ -354,11 +354,11 @@ def retinanet_bbox(
     else:
         outputs = detections
 
-    print("=======================================================Output shapes:")
-    for output in outputs:
-        print("    shape: " + str(output.shape))
+    # print("=======================================================Output shapes:")
+    # for output in outputs:
+    #     print("    shape: " + str(output.shape))
 
-    # print("============================================================================", other[0].shape)
+    # # print("============================================================================", other[0].shape)
 
     # construct the model
     return keras.models.Model(inputs=model.inputs, outputs=outputs, name=name)
