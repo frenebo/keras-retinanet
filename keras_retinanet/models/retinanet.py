@@ -348,7 +348,7 @@ def retinanet_bbox(
         name                  = 'filtered_detections'
     )([boxes, classification] + other)
 
-    print("============================================================================", other.shape)
+    print("============================================================================", other[0].shape)
 
     # construct the model
     return keras.models.Model(inputs=model.inputs, outputs=detections, name=name)
