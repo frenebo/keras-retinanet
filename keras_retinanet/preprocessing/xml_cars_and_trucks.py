@@ -88,6 +88,7 @@ def _load_images_annotations(annotations_dir):
 
 
 from ..utils.anchors import compute_gt_annotations, anchor_targets_bbox
+import keras
 
 def north_south_anchor_targets_bbox(
     anchors,
