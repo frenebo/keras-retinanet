@@ -350,6 +350,7 @@ def retinanet_bbox(
     )([boxes, classification] + other)
 
     if using_direction:
+        raise Exception("Using direction")
         detections = detections[:3] + [layers.Argmax(axis=-1)(detections[3])] + detections[4:]
 
     # print("============================================================================", other[0].shape)
