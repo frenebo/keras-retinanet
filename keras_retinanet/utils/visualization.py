@@ -82,7 +82,7 @@ def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None
         caption = (label_to_name(labels[i]) if label_to_name else labels[i]) + ': {0:.2f}'.format(scores[i])
 
         if using_direction:
-            caption += "\n" + label_to_direction_name(directions[i])
+            caption += " " + label_to_direction_name(directions[i])
 
         draw_caption(image, boxes[i, :], caption)
 
