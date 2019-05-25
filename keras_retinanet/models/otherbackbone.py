@@ -18,7 +18,7 @@ limitations under the License.
 import keras
 from keras.utils import get_file
 from keras.models import Model
-from keras.layers import Conv2D, Activation, BatchNormalization, MaxPooling2D
+from keras.layers import Conv2D, Activation, BatchNormalization, MaxPooling2D, ZeroPadding2D
 
 from . import retinanet
 from . import Backbone
@@ -54,16 +54,16 @@ def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier
 
     x = inputs
 
-    x = keras.layers.ZeroPadding2D(padding=(3, 3), name='conv1_pad')(x)
+    x = ZeroPadding2D(padding=(3, 3), name='first_zeropad')(x)
     x = Conv2D(64, (7, 7),
                       strides=(3, 3),
                       padding='valid',
                       kernel_initializer='he_normal',
                       name='first_conv')(x)
     x = BatchNormalization(axis=3, name='bn_conv1')(x)
-    x = Activation('relu')(x)
+    x = Activation('relu', name="first_activation")(x)
     # x = keras.layers.ZeroPadding2D(padding=(1, 1), name='pool1_pad')(x)
-    x = MaxPooling2D((3, 3), strides=(2, 2))(x)
+    x = MaxPooling2D((3, 3), strides=(2, 2), name='first_maxpooling')(x)
 
     for i in range(4):
         x = Conv2D(64, (1, 1),
