@@ -53,7 +53,7 @@ def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier
         inputs = keras.layers.Input(shape=(None, None, 3))
 
     x = inputs
-    for i in range(9):
+    for i in range(4):
         x = Conv2D(64, (1, 1),
                         kernel_initializer='he_normal',
                         name="conv_{}".format(i))(x)
@@ -67,9 +67,9 @@ def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier
         model = modifier(model)
 
     layer_names = [
-        "conv_4",
-        "conv_6",
-        "conv_8",
+        "conv_1",
+        "conv_2",
+        "conv_3",
     ]
     layer_outputs = [model.get_layer(name).output for name in layer_names]
     return retinanet.retinanet(inputs=inputs, num_classes=num_classes, backbone_layers=layer_outputs, **kwargs)
