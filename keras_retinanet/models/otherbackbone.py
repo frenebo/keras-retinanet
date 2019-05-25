@@ -45,46 +45,46 @@ class OtherBackbone(Backbone):
         """
         return preprocess_image(inputs, mode="caffe")
 
-def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier=None, **kwargs):
-    if backbone != "other":
-        raise ValueError("Backbone {} not recognized.".format(backbone))
+# def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier=None, **kwargs):
+#     if backbone != "other":
+#         raise ValueError("Backbone {} not recognized.".format(backbone))
 
-    if inputs is None:
-        inputs = keras.layers.Input(shape=(None, None, 3))
+#     if inputs is None:
+#         inputs = keras.layers.Input(shape=(None, None, 3))
 
-    x = inputs
+#     x = inputs
 
-    x = ZeroPadding2D(padding=(3, 3), name='first_zeropad')(x)
-    x = Conv2D(64, (7, 7),
-                      strides=(3, 3),
-                      padding='valid',
-                      kernel_initializer='he_normal',
-                      name='first_conv')(x)
-    x = BatchNormalization(axis=3, name='bn_conv1')(x)
-    x = Activation('relu', name="first_activation")(x)
-    # x = keras.layers.ZeroPadding2D(padding=(1, 1), name='pool1_pad')(x)
-    x = MaxPooling2D((3, 3), strides=(2, 2), name='first_maxpooling')(x)
+#     x = ZeroPadding2D(padding=(3, 3), name='first_zeropad')(x)
+#     x = Conv2D(64, (7, 7),
+#                       strides=(3, 3),
+#                       padding='valid',
+#                       kernel_initializer='he_normal',
+#                       name='first_conv')(x)
+#     x = BatchNormalization(axis=3, name='bn_conv1')(x)
+#     x = Activation('relu', name="first_activation")(x)
+#     # x = keras.layers.ZeroPadding2D(padding=(1, 1), name='pool1_pad')(x)
+#     x = MaxPooling2D((3, 3), strides=(2, 2), name='first_maxpooling')(x)
 
-    for i in range(4):
-        x = Conv2D(64, (1, 1),
-                        kernel_initializer='he_normal',
-                        name="conv_{}".format(i))(x)
-        x = BatchNormalization(axis=3, name="bn_{}".format(i))(x)
-        x = Activation('relu', name="activation_{}".format(i))(x)
+#     for i in range(4):
+#         x = Conv2D(64, (1, 1),
+#                         kernel_initializer='he_normal',
+#                         name="conv_{}".format(i))(x)
+#         x = BatchNormalization(axis=3, name="bn_{}".format(i))(x)
+#         x = Activation('relu', name="activation_{}".format(i))(x)
 
-    model = Model(inputs=inputs, outputs=x)
+#     model = Model(inputs=inputs, outputs=x)
 
 
-    if modifier:
-        model = modifier(model)
+#     if modifier:
+#         model = modifier(model)
 
-    layer_names = [
-        "conv_1",
-        "conv_2",
-        "conv_3",
-    ]
-    layer_outputs = [model.get_layer(name).output for name in layer_names]
-    return retinanet.retinanet(inputs=inputs, num_classes=num_classes, backbone_layers=layer_outputs, **kwargs)
+#     layer_names = [
+#         "conv_1",
+#         "conv_2",
+#         "conv_3",
+#     ]
+#     layer_outputs = [model.get_layer(name).output for name in layer_names]
+#     return retinanet.retinanet(inputs=inputs, num_classes=num_classes, backbone_layers=layer_outputs, **kwargs)
 
 def _resnet_identity_block(
     input_tensor,
@@ -194,7 +194,7 @@ def _resnet_conv_block(
     x = keras.layers.Activation('relu')(x)
     return x
 
-def create_resnet_and_return_outputs(num_classes, backbone='other', inputs=None, modifier=None, **kwargs):
+def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier=None, **kwargs):
     if not trainable:
         raise Exception("Unimplemented non-trainable resnet")
     bn_axis = 3
