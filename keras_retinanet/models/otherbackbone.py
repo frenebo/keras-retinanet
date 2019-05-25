@@ -18,7 +18,7 @@ limitations under the License.
 import keras
 from keras.utils import get_file
 from keras.models import Model
-from keras.layers import Conv2D, Activation
+from keras.layers import Conv2D, Activation, BatchNormalization
 
 from . import retinanet
 from . import Backbone
