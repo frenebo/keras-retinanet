@@ -126,8 +126,6 @@ class FilterDetections(keras.layers.Layer):
         parallel_iterations   = 32,
         **kwargs
     ):
-        print("=============================FILTER DETECTIONS CREATED=================================")
-        raise Exception("")
         """ Filters detections using score threshold, NMS and selecting the top-k detections.
 
         Args
