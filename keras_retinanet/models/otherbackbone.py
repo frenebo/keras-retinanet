@@ -195,8 +195,6 @@ def _resnet_conv_block(
     return x
 
 def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier=None, **kwargs):
-    if not trainable:
-        raise Exception("Unimplemented non-trainable resnet")
     bn_axis = 3
 
     # Layers
