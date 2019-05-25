@@ -351,9 +351,11 @@ def retinanet_bbox(
 
     if using_direction:
         raise Exception("Using direction")
-        detections = detections[:3] + [layers.Argmax(axis=-1)(detections[3])] + detections[4:]
+        outputs = detections[:3] + [layers.Argmax(axis=-1)(detections[3])] + detections[4:]
+    else:
+        outputs = detections
 
     # print("============================================================================", other[0].shape)
 
     # construct the model
-    return keras.models.Model(inputs=model.inputs, outputs=detections, name=name)
+    return keras.models.Model(inputs=model.inputs, outputs=outputs, name=name)
