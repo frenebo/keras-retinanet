@@ -119,7 +119,7 @@ def create_models(backbone_retinanet, num_classes, weights, multi_gpu=0,
         if submodel_num_anchors is None:
             submodel_num_anchors = AnchorParameters.default.num_anchors()
         submodels = default_submodels(num_classes, submodel_num_anchors)
-        submodels.append( ('direction', default_classification_model(2, submodel_num_anchors)) )
+        submodels.append( ('direction', default_classification_model(2, submodel_num_anchors, name='direction_submodel')) )
     else:
         submodels = None
 
