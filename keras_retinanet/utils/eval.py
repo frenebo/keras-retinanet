@@ -83,6 +83,11 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
         # run network
         predicted = model.predict_on_batch(np.expand_dims(image, axis=0))
         boxes, scores, labels = predicted[:3]
+        np.save("detections/boxes_{}".format(i), boxes)
+        np.save("detections/scores_{}".format(i), scores)
+        np.save("detections/labels_{}".format(i), labels)
+        if using_direction:
+            np.save("detections/directions_{}".format(i), predicted[3])
 
         # correct boxes for image scale
         boxes /= scale
