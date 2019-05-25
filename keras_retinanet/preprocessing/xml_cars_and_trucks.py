@@ -179,3 +179,16 @@ class XmlCarsAndTrucksGenerator(Generator):
             ))
 
         return annotations
+
+    # Extra methods for north/south
+    def direction_name_to_label(self, direction):
+        if direction == "north":
+            return 0
+        else:
+            return 1
+
+    def label_to_direction_name(self, label):
+        if label == 0:
+            return "north"
+        else:
+            return "south"
