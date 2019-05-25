@@ -83,6 +83,12 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
         # run network
         predicted = model.predict_on_batch(np.expand_dims(image, axis=0))
         boxes, scores, labels = predicted[:3]
+
+        try:
+            os.makedirs("detections")
+        except:
+            pass
+
         np.save("detections/boxes_{}".format(i), boxes)
         np.save("detections/scores_{}".format(i), scores)
         np.save("detections/labels_{}".format(i), labels)
