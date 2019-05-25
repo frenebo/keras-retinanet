@@ -318,6 +318,24 @@ def create_generators(args, preprocess_image):
             subset='val',
             **common_args
         )
+    elif args.dataset_type == 'xml':
+        train_generator = XmlCarsAndTrucksGenerator(
+            args.annotations_dir,
+            args.classes,
+            args.images_root,
+            transform_generator=transform_generator,
+            **common_args
+        )
+
+        if args.val_annotations_dir:
+            validation_generator = CSVGenerator(
+                args.val_annotations_dir,
+                args.classes,
+                args.images_root,
+                **common_args
+            )
+        else:
+            validation_generator = None
     else:
         raise ValueError('Invalid data type received: {}'.format(args.dataset_type))
 
@@ -385,6 +403,12 @@ def parse_args(args):
     csv_parser.add_argument('annotations', help='Path to CSV file containing annotations for training.')
     csv_parser.add_argument('classes', help='Path to a CSV file containing class label mapping.')
     csv_parser.add_argument('--val-annotations', help='Path to CSV file containing annotations for validation (optional).')
+
+    xml_parser = subparses.add_parse('xml')
+    xml_parser.add_argument('annotations-dir', help="Path to dir that contains XML annotation files")
+    xml_parser.add_argument('classes', help='Path to a CSV file containing annotations for validtion')
+    xml_parser.add_argument('images-root', help="Root path for images")
+    xml_parser.add_argument('--val-annotations', help='Path to dir that contains validation XML annotation files')
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--snapshot',          help='Resume training from a snapshot.')
