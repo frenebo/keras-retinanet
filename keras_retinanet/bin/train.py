@@ -135,17 +135,17 @@ def create_models(backbone_retinanet, num_classes, weights, multi_gpu=0,
     # make prediction model
     prediction_model = retinanet_bbox(model=model, anchor_params=anchor_params)
 
-    losses = {
+    loss = {
         'regression'    : losses.smooth_l1(),
         'classification': losses.focal()
     }
 
     if using_direction:
-        losses['direction'] = losses.focal()
+        loss['direction'] = losses.focal()
 
     # compile model
     training_model.compile(
-        loss=losses,
+        loss=loss,
         optimizer=keras.optimizers.adam(lr=lr, clipnorm=0.001)
     )
 
