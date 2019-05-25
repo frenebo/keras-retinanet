@@ -356,7 +356,7 @@ def retinanet_bbox(
 
     print("=======================================================Output shapes:")
     for output in outputs:
-        print("    shape: " + output.shape)
+        print("    shape: " + str(output.shape))
 
     # print("============================================================================", other[0].shape)
 
