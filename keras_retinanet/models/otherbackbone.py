@@ -86,7 +86,7 @@ class OtherBackbone(Backbone):
 #     layer_outputs = [model.get_layer(name).output for name in layer_names]
 #     return retinanet.retinanet(inputs=inputs, num_classes=num_classes, backbone_layers=layer_outputs, **kwargs)
 
-def _resnet_identity_block(
+def identity_block(
     input_tensor,
     kernel_size,
     filters,
@@ -134,7 +134,7 @@ def _resnet_identity_block(
     x = keras.layers.Activation('relu')(x)
     return x
 
-def _resnet_conv_block(
+def conv_block(
     input_tensor,
     kernel_size,
     filters,
@@ -194,6 +194,8 @@ def _resnet_conv_block(
     x = keras.layers.Activation('relu')(x)
     return x
 
+
+# This is ResNet
 def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier=None, **kwargs):
     bn_axis = 3
 
@@ -215,28 +217,28 @@ def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier
     x = keras.layers.MaxPooling2D((3, 3), strides=(2, 2))(x)
 
     # Convolution module 2
-    x = _resnet_conv_block(x, 3, filters=[64, 64, 256], stage=2, block='a', strides=(1, 1))
-    x = _resnet_identity_block(x, 3, filters=[64, 64, 256], stage=2, block='b')
-    C2_output = x = _resnet_identity_block(x, 3, filters=[64, 64, 256], stage=2, block='c')
+    x = conv_block(x, 3, filters=[64, 64, 256], stage=2, block='a', strides=(1, 1))
+    x = identity_block(x, 3, filters=[64, 64, 256], stage=2, block='b')
+    C2_output = x = identity_block(x, 3, filters=[64, 64, 256], stage=2, block='c')
 
     # Convolution module 3
-    x = _resnet_conv_block(x, 3, filters=[128, 128, 512], stage=3, block='a')
-    x = _resnet_identity_block(x, 3, filters=[128, 128, 512], stage=3, block='b')
-    x = _resnet_identity_block(x, 3, filters=[128, 128, 512], stage=3, block='c')
-    C3_output = x = _resnet_identity_block(x, 3, filters=[128, 128, 512], stage=3, block='d')
+    x = conv_block(x, 3, filters=[128, 128, 512], stage=3, block='a')
+    x = identity_block(x, 3, filters=[128, 128, 512], stage=3, block='b')
+    x = identity_block(x, 3, filters=[128, 128, 512], stage=3, block='c')
+    C3_output = x = identity_block(x, 3, filters=[128, 128, 512], stage=3, block='d')
 
     # Convolution module 4
-    x = _resnet_conv_block(x, 3, filters=[256, 256, 1024], stage=4, block='a')
-    x = _resnet_identity_block(x, 3, filters=[256, 256, 1024], stage=4, block='b')
-    x = _resnet_identity_block(x, 3, filters=[256, 256, 1024], stage=4, block='c')
-    x = _resnet_identity_block(x, 3, filters=[256, 256, 1024], stage=4, block='d')
-    x = _resnet_identity_block(x, 3, filters=[256, 256, 1024], stage=4, block='e')
-    C4_output = x = _resnet_identity_block(x, 3, filters=[256, 256, 1024], stage=4, block='f')
+    x = conv_block(x, 3, filters=[256, 256, 1024], stage=4, block='a')
+    x = identity_block(x, 3, filters=[256, 256, 1024], stage=4, block='b')
+    x = identity_block(x, 3, filters=[256, 256, 1024], stage=4, block='c')
+    x = identity_block(x, 3, filters=[256, 256, 1024], stage=4, block='d')
+    x = identity_block(x, 3, filters=[256, 256, 1024], stage=4, block='e')
+    C4_output = x = identity_block(x, 3, filters=[256, 256, 1024], stage=4, block='f')
 
     # Convolution module 5
-    x = _resnet_conv_block(x, 3, filters=[512, 512, 2048], stage=5, block='a')
-    x = _resnet_identity_block(x, 3, filters=[512, 512, 2048], stage=5, block='b')
-    C5_output = x = _resnet_identity_block(x, 3, filters=[512, 512, 2048], stage=5, block='c')
+    x = conv_block(x, 3, filters=[512, 512, 2048], stage=5, block='a')
+    x = identity_block(x, 3, filters=[512, 512, 2048], stage=5, block='b')
+    C5_output = x = identity_block(x, 3, filters=[512, 512, 2048], stage=5, block='c')
 
     model = Model(inputs=inputs, outputs=C5_output)
 
