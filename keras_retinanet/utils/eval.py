@@ -55,7 +55,7 @@ def _compute_ap(recall, precision):
     return ap
 
 
-def _get_detections(generator, model, score_threshold=0.05, max_detections=100, save_path=None):
+def _get_detections(generator, model, score_threshold=0.05, max_detections=100, save_path=None, using_direction=False):
     """ Get the detections from the model using the generator.
 
     The result is a list of lists such that the size is:
@@ -81,7 +81,8 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
             image = image.transpose((2, 0, 1))
 
         # run network
-        boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis=0))[:3]
+        predicted = model.predict_on_batch(np.expand_dims(image, axis=0))
+        boxes, scores, labels = predicted[:3]
 
         # correct boxes for image scale
         boxes /= scale
@@ -101,9 +102,29 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
         image_labels     = labels[0, indices[scores_sort]]
         image_detections = np.concatenate([image_boxes, np.expand_dims(image_scores, axis=1), np.expand_dims(image_labels, axis=1)], axis=1)
 
+        if using_direction:
+            image_directions = predicted[3][0, indices[scores_sort]]
+
         if save_path is not None:
             draw_annotations(raw_image, generator.load_annotations(i), label_to_name=generator.label_to_name)
-            draw_detections(raw_image, image_boxes, image_scores, image_labels, label_to_name=generator.label_to_name)
+
+            if using_direction:
+                draw_detections(
+                    raw_image,
+                    image_boxes,
+                    image_scores,
+                    image_labels,
+                    label_to_name=generator.label_to_name,
+                    using_direction=True,
+                    label_to_direction_name=generator.label_to_direction_name,
+                    directions=image_directions)
+            else:
+                draw_detections(
+                    raw_image,
+                    image_boxes,
+                    image_scores,
+                    image_labels,
+                    label_to_name=generator.label_to_name)
 
             cv2.imwrite(os.path.join(save_path, '{}.png'.format(i)), raw_image)
 
@@ -150,7 +171,8 @@ def evaluate(
     iou_threshold=0.5,
     score_threshold=0.05,
     max_detections=100,
-    save_path=None
+    save_path=None,
+    using_direction=False,
 ):
     """ Evaluate a given dataset using a given model.
 
@@ -165,7 +187,7 @@ def evaluate(
         A dict mapping class names to mAP scores.
     """
     # gather all detections and annotations
-    all_detections     = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=save_path)
+    all_detections     = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=save_path, using_direction=using_direction)
     all_annotations    = _get_annotations(generator)
     average_precisions = {}
 

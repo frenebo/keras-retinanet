@@ -59,7 +59,8 @@ def draw_boxes(image, boxes, color, thickness=2):
         draw_box(image, b, color, thickness=thickness)
 
 
-def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None, score_threshold=0.5):
+def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None, score_threshold=0.5,
+    using_direction=False, label_to_direction_name=None, directions=None):
     """ Draws detections in an image.
 
     # Arguments
@@ -79,10 +80,14 @@ def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None
 
         # draw labels
         caption = (label_to_name(labels[i]) if label_to_name else labels[i]) + ': {0:.2f}'.format(scores[i])
+
+        if using_direction:
+            caption += "\n" + label_to_direction_name(directions[i])
+
         draw_caption(image, boxes[i, :], caption)
 
 
-def draw_annotations(image, annotations, color=(0, 255, 0), label_to_name=None):
+def draw_annotations(image, annotations, color=(0, 255, 0), label_to_name=None, ):
     """ Draws annotations in an image.
 
     # Arguments
