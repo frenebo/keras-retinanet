@@ -133,7 +133,7 @@ def create_models(backbone_retinanet, num_classes, weights, multi_gpu=0,
         training_model = model
 
     # make prediction model
-    prediction_model = retinanet_bbox(model=model, anchor_params=anchor_params, using_direction=args.using_direction)
+    prediction_model = retinanet_bbox(model=model, anchor_params=anchor_params, using_direction=using_direction)
 
     loss = {
         'regression'    : losses.smooth_l1(),
