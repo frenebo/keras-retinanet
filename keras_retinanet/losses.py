@@ -49,6 +49,8 @@ def focal(alpha=0.25, gamma=2.0):
         labels         = backend.gather_nd(labels, indices)
         classification = backend.gather_nd(classification, indices)
 
+        print("Indices length: ", len(indices))
+
         # compute the focal loss
         alpha_factor = keras.backend.ones_like(labels) * alpha
         alpha_factor = backend.where(keras.backend.equal(labels, 1), alpha_factor, 1 - alpha_factor)
