@@ -135,7 +135,6 @@ def main(args=None):
     if args is None:
         args = sys.argv[1:]
     args = parse_args(args)
-    print("MODEL NAME: ", args.model)
 
     # make sure keras is the minimum required version
     check_keras_version()
