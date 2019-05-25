@@ -52,10 +52,11 @@ def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier
     if inputs is None:
         inputs = keras.layers.Input(shape=(None, None, 3))
 
+    x = inputs
     for i in range(9):
         x = Conv2D(64, (1, 1),
                         kernel_initializer='he_normal',
-                        name="conv_{}".format(i))(input_tensor)
+                        name="conv_{}".format(i))(x)
         x = BatchNormalization(axis=3, name="bn_{}".format(i))(x)
         x = Activation('relu', name="activation_{}".format(i))(x)
 
