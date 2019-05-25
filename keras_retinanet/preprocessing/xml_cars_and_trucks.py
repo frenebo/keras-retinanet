@@ -86,12 +86,67 @@ def _load_images_annotations(annotations_dir):
 
     return annotations
 
+
+from ..utils.anchors import compute_gt_annotations, anchor_targets_bbox
+
+def north_south_anchor_targets_bbox(
+    anchors,
+    image_group,
+    annotations_group,
+    num_classes,
+    num_directions=2,
+    negative_overlap=0.4,
+    positive_overlap=0.5
+):
+    assert(len(image_group) == len(annotations_group)), "The length of the images and annotations need to be equal."
+    assert(len(annotations_group) > 0), "No data received to compute anchor targets for."
+    for annotations in annotations_group:
+        assert('bboxes' in annotations), "Annotations should contain bboxes."
+        assert('labels' in annotations), "Annotations should contain labels."
+        assert('directions' in annotations), "Annotations should contain north-south directions."
+
+    batch_size = len(image_group)
+
+    regression_batch  = np.zeros((batch_size, anchors.shape[0], 4 + 1), dtype=keras.backend.floatx())
+    labels_batch      = np.zeros((batch_size, anchors.shape[0], num_classes + 1), dtype=keras.backend.floatx())
+    directions_batch  = np.zeros((batch_size, anchors.shape[0], num_directions + 1), dtype=keras.backend.floatx())
+
+    # compute labels and regression targets
+    for index, (image, annotations) in enumerate(zip(image_group, annotations_group)):
+        if annotations['bboxes'].shape[0]:
+            # obtain indices of gt annotations with the greatest overlap
+            positive_indices, ignore_indices, argmax_overlaps_inds = compute_gt_annotations(anchors, annotations['bboxes'], negative_overlap, positive_overlap)
+
+            labels_batch[index, ignore_indices, -1]       = -1
+            labels_batch[index, positive_indices, -1]     = 1
+
+            regression_batch[index, ignore_indices, -1]   = -1
+            regression_batch[index, positive_indices, -1] = 1
+
+            # compute target class labels
+            labels_batch[    index, positive_indices, annotations['labels'][argmax_overlaps_inds[positive_indices]].astype(int)] = 1
+            directions_batch[index, positive_indices, annotations['labels'][argmax_overlaps_inds[positive_indices]].astype(int)] = 1
+
+            regression_batch[index, :, :-1] = bbox_transform(anchors, annotations['bboxes'][argmax_overlaps_inds, :])
+
+        # ignore annotations outside of image
+        if image.shape:
+            anchors_centers = np.vstack([(anchors[:, 0] + anchors[:, 2]) / 2, (anchors[:, 1] + anchors[:, 3]) / 2]).T
+            indices = np.logical_or(anchors_centers[:, 0] >= image.shape[1], anchors_centers[:, 1] >= image.shape[0])
+
+            labels_batch[index, indices, -1]     = -1
+            directions_batch[index, indices, -1] = -1
+            regression_batch[index, indices, -1] = -1
+
+    return regression_batch, labels_batch, directions_batch
+
 class XmlCarsAndTrucksGenerator(Generator):
     def __init__(
         self,
         annotations_dir,
         csv_class_file,
         images_root,
+        using_direction=False,
         **kwargs
     ):
         self.images_root = images_root
@@ -109,7 +164,10 @@ class XmlCarsAndTrucksGenerator(Generator):
         for key, value in self.classes.items():
             self.labels[value] = key
 
-        super(XmlCarsAndTrucksGenerator, self).__init__(**kwargs)
+        super(XmlCarsAndTrucksGenerator, self).__init__(
+            compute_anchor_targets=(north_south_anchor_targets_bbox if using_direction else anchor_targets_bbox),
+            **kwargs
+        )
 
     def size(self):
         """ Size of the dataset.

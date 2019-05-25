@@ -37,7 +37,7 @@ from .. import losses
 from .. import models
 from ..callbacks import RedirectModel
 from ..callbacks.eval import Evaluate
-from ..models.retinanet import retinanet_bbox
+from ..models.retinanet import retinanet_bbox, default_submodels, default_classification_model
 from ..preprocessing.csv_generator import CSVGenerator
 from ..preprocessing.kitti import KittiGenerator
 from ..preprocessing.open_images import OpenImagesGenerator
@@ -83,7 +83,7 @@ def model_with_weights(model, weights, skip_mismatch):
 
 
 def create_models(backbone_retinanet, num_classes, weights, multi_gpu=0,
-                  freeze_backbone=False, lr=1e-5, config=None):
+                  freeze_backbone=False, lr=1e-5, config=None, using_direction=False):
     """ Creates three models (model, training_model, prediction_model).
 
     Args
@@ -111,24 +111,37 @@ def create_models(backbone_retinanet, num_classes, weights, multi_gpu=0,
 
     # Keras recommends initialising a multi-gpu model on the CPU to ease weight sharing, and to prevent OOM errors.
     # optionally wrap in a parallel model
+
+
+    if using_direction:
+        submodels = default_submodels(num_classes, num_anchors)
+        submodels.append( ('direction', default_classification_model(2, num_anchors)) )
+    else:
+        submodels = None
+
     if multi_gpu > 1:
         from keras.utils import multi_gpu_model
         with tf.device('/cpu:0'):
-            model = model_with_weights(backbone_retinanet(num_classes, num_anchors=num_anchors, modifier=modifier), weights=weights, skip_mismatch=True)
+            model = model_with_weights(backbone_retinanet(num_classes, num_anchors=num_anchors, modifier=modifier, submodels=submodels), weights=weights, skip_mismatch=True)
         training_model = multi_gpu_model(model, gpus=multi_gpu)
     else:
-        model          = model_with_weights(backbone_retinanet(num_classes, num_anchors=num_anchors, modifier=modifier), weights=weights, skip_mismatch=True)
+        model          = model_with_weights(backbone_retinanet(num_classes, num_anchors=num_anchors, modifier=modifier, submodels=submodels), weights=weights, skip_mismatch=True)
         training_model = model
 
     # make prediction model
     prediction_model = retinanet_bbox(model=model, anchor_params=anchor_params)
 
+    losses = {
+        'regression'    : losses.smooth_l1(),
+        'classification': losses.focal()
+    }
+
+    if using_direction:
+        losses['direction'] = losses.focal()
+
     # compile model
     training_model.compile(
-        loss={
-            'regression'    : losses.smooth_l1(),
-            'classification': losses.focal()
-        },
+        loss=losses,
         optimizer=keras.optimizers.adam(lr=lr, clipnorm=0.001)
     )
 
@@ -325,14 +338,16 @@ def create_generators(args, preprocess_image):
             args.classes,
             args.images_root,
             transform_generator=transform_generator,
+            using_direction=args.using_direction,
             **common_args
         )
 
         if args.val_annotations_dir:
-            validation_generator = CSVGenerator(
+            validation_generator = XmlCarsAndTrucksGenerator(
                 args.val_annotations_dir,
                 args.classes,
                 args.images_root,
+                using_direction=args.using_direction,
                 **common_args
             )
         else:
@@ -437,6 +452,8 @@ def parse_args(args):
     parser.add_argument('--weighted-average', help='Compute the mAP using the weighted average of precisions among classes.', action='store_true')
     parser.add_argument('--compute-val-loss', help='Compute validation loss during training', dest='compute_val_loss', action='store_true')
 
+    parser.add_argument('--using-direction',  help='Add a direction head to the model', action='store_true')
+
     # Fit generator arguments
     parser.add_argument('--workers', help='Number of multiprocessing workers. To disable multiprocessing, set workers to 0', type=int, default=1)
     parser.add_argument('--max-queue-size', help='Queue length for multiprocessing workers in fit generator.', type=int, default=10)
@@ -491,7 +508,8 @@ def main(args=None):
             multi_gpu=args.multi_gpu,
             freeze_backbone=args.freeze_backbone,
             lr=args.lr,
-            config=args.config
+            config=args.config,
+            using_direction=args.using_direction,
         )
 
     # print model summary
