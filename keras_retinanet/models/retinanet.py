@@ -354,6 +354,10 @@ def retinanet_bbox(
     else:
         outputs = detections
 
+    print("=======================================================Output shapes:")
+    for output in outputs:
+        print("    shape: " + output.shape)
+
     # print("============================================================================", other[0].shape)
 
     # construct the model
