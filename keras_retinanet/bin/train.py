@@ -48,6 +48,7 @@ from ..utils.config import read_config_file, parse_anchor_parameters
 from ..utils.keras_version import check_keras_version
 from ..utils.model import freeze as freeze_model
 from ..utils.transform import random_transform_generator
+from ..utils.anchors import AnchorParameters
 
 
 def makedirs(path):
@@ -114,7 +115,10 @@ def create_models(backbone_retinanet, num_classes, weights, multi_gpu=0,
 
 
     if using_direction:
-        submodels = default_submodels(num_classes, num_anchors)
+        submodel_num_anchors = num_anchors
+        if submodel_num_anchors is None:
+            submodel_num_anchors = AnchorParameters.default.num_anchors()
+        submodels = default_submodels(num_classes, submodel_num_anchors)
         submodels.append( ('direction', default_classification_model(2, num_anchors)) )
     else:
         submodels = None
