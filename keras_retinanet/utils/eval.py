@@ -129,6 +129,7 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
                     image_labels,
                     label_to_name=generator.label_to_name,
                     using_direction=True,
+                    score_threshold=0.1,
                     label_to_direction_name=generator.label_to_direction_name,
                     directions=image_directions)
             else:
@@ -137,6 +138,7 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
                     image_boxes,
                     image_scores,
                     image_labels,
+                    score_threshold=0.1,
                     label_to_name=generator.label_to_name)
 
             cv2.imwrite(os.path.join(save_path, '{}.png'.format(i)), raw_image)
