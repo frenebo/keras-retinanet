@@ -409,7 +409,7 @@ def parse_args(args):
     xml_parser.add_argument('annotations_dir', help="Path to dir that contains XML annotation files")
     xml_parser.add_argument('classes', help='Path to a CSV file containing annotations for validtion')
     xml_parser.add_argument('images_root', help="Root path for images")
-    xml_parser.add_argument('--val-annotations', help='Path to dir that contains validation XML annotation files')
+    xml_parser.add_argument('--val-annotations-dir', help='Path to dir that contains validation XML annotation files')
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--snapshot',          help='Resume training from a snapshot.')
