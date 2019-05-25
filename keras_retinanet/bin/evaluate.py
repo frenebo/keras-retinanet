@@ -31,6 +31,7 @@ if __name__ == "__main__" and __package__ is None:
 from .. import models
 from ..preprocessing.csv_generator import CSVGenerator
 from ..preprocessing.pascal_voc import PascalVocGenerator
+from ..preprocessing.xml_cars_and_trucks import XmlCarsAndTrucksGenerator
 from ..utils.config import read_config_file, parse_anchor_parameters
 from ..utils.eval import evaluate
 from ..utils.keras_version import check_keras_version
@@ -74,6 +75,16 @@ def create_generator(args):
             image_max_side=args.image_max_side,
             config=args.config
         )
+    elif args.dataset_type == 'xml':
+        validation_generator = XmlCarsAndTrucksGenerator(
+            args.annotations_dir,
+            args.classes,
+            args.images_root,
+            using_direction=args.using_direction,
+            image_min_side=args.image_min_side,
+            image_max_side=args.image_max_side,
+            config=args.config
+        )
     else:
         raise ValueError('Invalid data type received: {}'.format(args.dataset_type))
 
@@ -97,6 +108,11 @@ def parse_args(args):
     csv_parser.add_argument('annotations', help='Path to CSV file containing annotations for evaluation.')
     csv_parser.add_argument('classes', help='Path to a CSV file containing class label mapping.')
 
+    xml_parser = subparsers.add_parser('xml')
+    xml_parser.add_argument('annotations_dir', help="Path to dir that contains XML annotation files")
+    xml_parser.add_argument('classes', help='Path to a CSV file containing annotations for validtion')
+    xml_parser.add_argument('images_root', help="Root path for images")
+
     parser.add_argument('model',              help='Path to RetinaNet model.')
     parser.add_argument('--convert-model',    help='Convert the model to an inference model (ie. the input is a training model).', action='store_true')
     parser.add_argument('--backbone',         help='The backbone of the model.', default='resnet50')
@@ -108,6 +124,8 @@ def parse_args(args):
     parser.add_argument('--image-min-side',   help='Rescale the image so the smallest side is min_side.', type=int, default=800)
     parser.add_argument('--image-max-side',   help='Rescale the image if the largest side is larger than max_side.', type=int, default=1333)
     parser.add_argument('--config',           help='Path to a configuration parameters .ini file (only used with --convert-model).')
+
+    parser.add_argument('--using-direction',  help='Add a direction head to the model', action='store_true')
 
     return parser.parse_args(args)
 
