@@ -199,6 +199,9 @@ def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier
 
     # Layers
 
+    if inputs is None:
+        inputs = keras.layers.Input(shape=(None, None, 3))
+
     x = inputs
     x = keras.layers.ZeroPadding2D(padding=(3, 3), name='conv1_pad')(x)
     x = keras.layers.Conv2D(64, (7, 7),
