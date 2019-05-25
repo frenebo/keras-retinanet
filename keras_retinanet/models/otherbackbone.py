@@ -52,6 +52,8 @@ def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier
     if inputs is None:
         inputs = keras.layers.Input(shape=(None, None, 3))
 
+    x = inputs
+
     x = keras.layers.ZeroPadding2D(padding=(3, 3), name='conv1_pad')(x)
     x = Conv2D(64, (7, 7),
                       strides=(3, 3),
@@ -63,7 +65,6 @@ def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier
     # x = keras.layers.ZeroPadding2D(padding=(1, 1), name='pool1_pad')(x)
     x = MaxPooling2D((3, 3), strides=(2, 2))(x)
 
-    x = inputs
     for i in range(4):
         x = Conv2D(64, (1, 1),
                         kernel_initializer='he_normal',
