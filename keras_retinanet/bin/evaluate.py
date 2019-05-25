@@ -166,7 +166,7 @@ def main(args=None):
 
     # optionally convert the model
     if args.convert_model:
-        model = models.convert_model(model, anchor_params=anchor_params)
+        model = models.convert_model(model, anchor_params=anchor_params, using_direction=args.using_direction)
 
     # print model summary
     # print(model.summary())
