@@ -124,6 +124,10 @@ def north_south_anchor_targets_bbox(
             regression_batch[index, ignore_indices, -1]   = -1
             regression_batch[index, positive_indices, -1] = 1
 
+
+            directions_batch[index, ignore_indices, -1]       = -1
+            directions_batch[index, positive_indices, -1]     = 1
+
             # compute target class labels
             labels_batch[    index, positive_indices, annotations['labels'][argmax_overlaps_inds[positive_indices]].astype(int)] = 1
             directions_batch[index, positive_indices, annotations['labels'][argmax_overlaps_inds[positive_indices]].astype(int)] = 1
