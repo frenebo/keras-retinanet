@@ -99,7 +99,6 @@ def north_south_anchor_targets_bbox(
     negative_overlap=0.4,
     positive_overlap=0.5
 ):
-    print("North south used")
     assert(len(image_group) == len(annotations_group)), "The length of the images and annotations need to be equal."
     assert(len(annotations_group) > 0), "No data received to compute anchor targets for."
     for annotations in annotations_group:
@@ -139,6 +138,10 @@ def north_south_anchor_targets_bbox(
             labels_batch[index, indices, -1]     = -1
             directions_batch[index, indices, -1] = -1
             regression_batch[index, indices, -1] = -1
+
+    print("regression_batch: ", regression_batch.shape)
+    print("labels_batch: ", labels_batch)
+    print("directions_batch: ", directions_batch)
 
     return regression_batch, labels_batch, directions_batch
 
