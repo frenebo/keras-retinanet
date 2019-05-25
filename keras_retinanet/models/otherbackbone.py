@@ -60,7 +60,7 @@ def otherbackbone_retinanet(num_classes, backbone='other', inputs=None, modifier
                       padding='valid',
                       kernel_initializer='he_normal',
                       name='first_conv')(x)
-    x = BatchNormalization(axis=bn_axis, name='bn_conv1')(x)
+    x = BatchNormalization(axis=3, name='bn_conv1')(x)
     x = Activation('relu')(x)
     # x = keras.layers.ZeroPadding2D(padding=(1, 1), name='pool1_pad')(x)
     x = MaxPooling2D((3, 3), strides=(2, 2))(x)
