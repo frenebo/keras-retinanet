@@ -245,6 +245,12 @@ class XmlCarsAndTrucksGenerator(Generator):
                 [self.direction_name_to_label(image_annotation["direction"])]
             ))
 
+        # switching to check
+        temp = annotations["directions"]
+        annotations["directions"] = annotations["labels"]
+        annotations["labels"] = temp
+
+
         return annotations
 
     # Extra methods for north/south
