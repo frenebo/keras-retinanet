@@ -162,7 +162,6 @@ def main(args=None):
 
     # load the model
     print('Loading model, this may take a second...')
-    print(args.model)
     model = models.load_model(args.model, backbone_name=args.backbone)
 
     # optionally convert the model
