@@ -128,6 +128,7 @@ def parse_args(args):
 
     parser.add_argument('--using-direction',  help='Add a direction head to the model', action='store_true')
     parser.add_argument('--score-direction', help='Score the direction of the model', action='store_true')
+    parser.add_argument('--do-not-draw-annotations', help='Do not draw annotations on result images', action='store_true')
 
     return parser.parse_args(args)
 
@@ -208,7 +209,7 @@ def main(args=None):
             max_detections=args.max_detections,
             save_path=args.save_path,
             using_direction=args.using_direction,
-            # evaluate_direction
+            do_not_draw_annotations=args.do_not_draw_annotations
         )
 
         # print evaluation

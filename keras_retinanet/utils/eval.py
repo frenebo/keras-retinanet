@@ -55,7 +55,7 @@ def _compute_ap(recall, precision):
     return ap
 
 
-def _get_detections(generator, model, score_threshold=0.05, max_detections=100, save_path=None, using_direction=False):
+def _get_detections(generator, model, score_threshold=0.05, max_detections=100, save_path=None, using_direction=False, do_not_draw_annotations=False):
     """ Get the detections from the model using the generator.
 
     The result is a list of lists such that the size is:
@@ -118,7 +118,8 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
             print(image_directions)
 
         if save_path is not None:
-            draw_annotations(raw_image, generator.load_annotations(i), label_to_name=generator.label_to_name)
+            if not do_not_draw_annotations:
+                draw_annotations(raw_image, generator.load_annotations(i), label_to_name=generator.label_to_name)
 
             if using_direction:
                 draw_detections(
@@ -187,6 +188,7 @@ def evaluate(
     max_detections=100,
     save_path=None,
     using_direction=False,
+    do_not_draw_annotations=False,
 ):
     """ Evaluate a given dataset using a given model.
 
@@ -201,7 +203,7 @@ def evaluate(
         A dict mapping class names to mAP scores.
     """
     # gather all detections and annotations
-    all_detections     = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=save_path, using_direction=using_direction)
+    all_detections     = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=save_path, using_direction=using_direction, do_not_draw_annotations=do_not_draw_annotations)
     all_annotations    = _get_annotations(generator)
     average_precisions = {}
 
