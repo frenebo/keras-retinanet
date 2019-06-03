@@ -127,7 +127,7 @@ def parse_args(args):
     parser.add_argument('--config',           help='Path to a configuration parameters .ini file (only used with --convert-model).')
 
     parser.add_argument('--using-direction',  help='Add a direction head to the model', action='store_true')
-    parser.add_argument('--score-direction', help='Score the direction of the model')
+    parser.add_argument('--score-direction', help='Score the direction of the model', action='store_true')
 
     return parser.parse_args(args)
 
