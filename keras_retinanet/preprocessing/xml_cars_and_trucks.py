@@ -270,5 +270,7 @@ class XmlCarsAndTrucksGenerator(Generator):
     def label_to_direction_name(self, label):
         if label == 0:
             return "north"
-        else:
+        elif label == 1:
             return "south"
+        else:
+            raise Exception("Invalid label " + str(label))
