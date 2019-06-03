@@ -188,6 +188,7 @@ class XmlCarsAndTrucksGenerator(Generator):
         """
         return max(self.classes.values()) + 1
 
+
     def has_label(self, label):
         """ Return True if label is a known label.
         """
@@ -247,6 +248,17 @@ class XmlCarsAndTrucksGenerator(Generator):
 
 
         return annotations
+
+    def direction_num_classes(self):
+        return 2 # north, south
+
+    def direction_has_label(self, label):
+        """ Return True if label is a known label.
+        """
+        return label in [0,1]
+
+    def direction_has_name(self, name):
+        return label in ["north", "south"]
 
     # Extra methods for north/south
     def direction_name_to_label(self, direction):
