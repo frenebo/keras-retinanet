@@ -93,7 +93,7 @@ def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None
         caption = (label_to_name(labels[i]) if label_to_name else labels[i]) + ': {0:.2f}'.format(scores[i])
 
 
-        black_on_white = using_direction
+        black_on_white = using_direction and label_to_direction_name(directions[i]) == "north"
         if using_direction:
             # print("directions[i]", directions[i])
             # print("Same: ", directions[i] == labels[i])
