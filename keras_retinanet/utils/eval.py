@@ -121,25 +121,25 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
             if not do_not_draw_annotations:
                 draw_annotations(raw_image, generator.load_annotations(i), label_to_name=generator.label_to_name)
 
-            if using_direction:
-                draw_detections(
-                    raw_image,
-                    image_boxes,
-                    image_scores,
-                    image_labels,
-                    label_to_name=generator.label_to_name,
-                    using_direction=True,
-                    score_threshold=0.2,
-                    label_to_direction_name=generator.label_to_direction_name,
-                    directions=image_directions)
-            else:
-                draw_detections(
-                    raw_image,
-                    image_boxes,
-                    image_scores,
-                    image_labels,
-                    score_threshold=0.2,
-                    label_to_name=generator.label_to_name)
+            # if using_direction:
+            #     draw_detections(
+            #         raw_image,
+            #         image_boxes,
+            #         image_scores,
+            #         image_labels,
+            #         label_to_name=generator.label_to_name,
+            #         using_direction=True,
+            #         score_threshold=0.2,
+            #         label_to_direction_name=generator.label_to_direction_name,
+            #         directions=image_directions)
+            # else:
+            draw_detections(
+                raw_image,
+                image_boxes,
+                image_scores,
+                image_labels,
+                score_threshold=0.2,
+                label_to_name=generator.label_to_name)
 
             cv2.imwrite(os.path.join(save_path, '{}.png'.format(i)), raw_image)
 
@@ -153,7 +153,7 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
     return all_detections
 
 
-def _get_annotations(generator):
+def _get_annotations(generator,  score_direction):
     """ Get the ground truth annotations from the generator.
 
     The result is a list of lists such that the size is:
@@ -175,7 +175,9 @@ def _get_annotations(generator):
             if not generator.has_label(label):
                 continue
 
-            all_annotations[i][label] = annotations['bboxes'][annotations['labels'] == label, :].copy()
+            annotation_item = "directions" if score_direction else "labels"
+
+            all_annotations[i][label] = annotations['bboxes'][annotations[annotation_item] == label, :].copy()
 
     return all_annotations
 
@@ -188,6 +190,7 @@ def evaluate(
     max_detections=100,
     save_path=None,
     using_direction=False,
+    score_direction=False,
     do_not_draw_annotations=False,
 ):
     """ Evaluate a given dataset using a given model.
@@ -213,6 +216,15 @@ def evaluate(
     # pickle.dump(all_annotations, open('all_annotations.pkl', 'wb'))
 
     # process detections and annotations
+
+    if score_direction:
+        print("SCORING DIRECTION!")
+        generator.num_classes = generator.direction_num_classes
+        generator.has_label = generator.direction_has_label
+        generator.has_name = generator.direction_has_name
+        generator.name_to_label = generator.direction_name_to_label
+        generator.label_to_name = generator.label_to_direction_name
+
     for label in range(generator.num_classes()):
         if not generator.has_label(label):
             continue
