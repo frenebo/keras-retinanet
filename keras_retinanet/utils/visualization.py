@@ -98,7 +98,8 @@ def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None
             # print("directions[i]", directions[i])
             # print("Same: ", directions[i] == labels[i])
             # print("directions label[i]", label_to_direction_name(directions[i]))
-            caption += " " + label_to_direction_name(directions[i])
+            direction = label_to_direction_name(directions[i])[0].capitalize()
+            caption += " " + direction
 
         draw_caption(image, boxes[i, :], caption, black_on_white=black_on_white)
 
