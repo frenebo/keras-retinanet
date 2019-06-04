@@ -84,7 +84,7 @@ def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None
             aresame = direction == labels[i]
             message += separator + "same" if aresame else "DIFFERENT"
             separator = ", "
-        print(message)
+        # print(message)
 
     for i in selection:
         c = color if color is not None else label_color(labels[i])
