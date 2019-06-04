@@ -153,7 +153,7 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
     return all_detections
 
 
-def _get_annotations(generator,  score_direction):
+def _get_annotations(generator, score_direction=False):
     """ Get the ground truth annotations from the generator.
 
     The result is a list of lists such that the size is:
@@ -207,7 +207,7 @@ def evaluate(
     """
     # gather all detections and annotations
     all_detections     = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=save_path, using_direction=using_direction, do_not_draw_annotations=do_not_draw_annotations)
-    all_annotations    = _get_annotations(generator)
+    all_annotations    = _get_annotations(generator, score_direction=score_direction)
     average_precisions = {}
 
     # all_detections = pickle.load(open('all_detections.pkl', 'rb'))
