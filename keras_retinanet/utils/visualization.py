@@ -82,8 +82,7 @@ def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None
         separator = ""
         for i, direction in enumerate(directions):
             aresame = direction == labels[i]
-            message += "same" if aresame else "DIFFERENT"
-            # message += separator + label_to_direction_name(direction)
+            message += separator + "same" if aresame else "DIFFERENT"
             separator = ", "
         print(message)
 
