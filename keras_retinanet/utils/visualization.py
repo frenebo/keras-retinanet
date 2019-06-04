@@ -33,7 +33,7 @@ def draw_box(image, box, color, thickness=2):
     cv2.rectangle(image, (b[0], b[1]), (b[2], b[3]), color, thickness, cv2.LINE_AA)
 
 
-def draw_caption(image, box, caption):
+def draw_caption(image, box, caption, black_on_white=False):
     """ Draws a caption above the box in an image.
 
     # Arguments
@@ -42,8 +42,11 @@ def draw_caption(image, box, caption):
         caption : String containing the text to draw.
     """
     b = np.array(box).astype(int)
-    cv2.putText(image, caption, (b[0], b[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0), 2)
-    cv2.putText(image, caption, (b[0], b[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 1)
+
+    background_color = (255,255,255) if black_on_white else (0,0,0)
+    foreground_color = (0,0,0) if black_on_white else (255,255,255)
+    cv2.putText(image, caption, (b[0], b[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1, background_color, 2)
+    cv2.putText(image, caption, (b[0], b[1] - 10), cv2.FONT_HERSHEY_PLAIN, 1, foreground_color, 1)
 
 
 def draw_boxes(image, boxes, color, thickness=2):
@@ -74,6 +77,15 @@ def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None
     """
     selection = np.where(scores > score_threshold)[0]
 
+    if using_direction:
+        message = "Directions: "
+        separator = ""
+        for i, direction in enumerate(directions):
+            aresame = direction == labels[i]
+            message += separator + "same" if aresame else "DIFFERENT"
+            separator = ", "
+        print(message)
+
     for i in selection:
         c = color if color is not None else label_color(labels[i])
         draw_box(image, boxes[i, :], color=c)
@@ -81,13 +93,16 @@ def draw_detections(image, boxes, scores, labels, color=None, label_to_name=None
         # draw labels
         caption = (label_to_name(labels[i]) if label_to_name else labels[i]) + ': {0:.2f}'.format(scores[i])
 
+
+        black_on_white = using_direction and label_to_direction_name(directions[i]) == "north"
         if using_direction:
             # print("directions[i]", directions[i])
             # print("Same: ", directions[i] == labels[i])
             # print("directions label[i]", label_to_direction_name(directions[i]))
-            caption += " " + label_to_direction_name(directions[i])
+            direction = label_to_direction_name(directions[i])[0].capitalize()
+            caption += " " + direction
 
-        draw_caption(image, boxes[i, :], caption)
+        draw_caption(image, boxes[i, :], caption, black_on_white=black_on_white)
 
 
 def draw_annotations(image, annotations, color=(0, 255, 0), label_to_name=None):

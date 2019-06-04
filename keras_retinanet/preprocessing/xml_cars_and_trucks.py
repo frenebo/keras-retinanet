@@ -130,7 +130,7 @@ def north_south_anchor_targets_bbox(
 
             # compute target class labels
             labels_batch[    index, positive_indices, annotations['labels'][argmax_overlaps_inds[positive_indices]].astype(int)] = 1
-            directions_batch[index, positive_indices, annotations['labels'][argmax_overlaps_inds[positive_indices]].astype(int)] = 1
+            directions_batch[index, positive_indices, annotations['directions'][argmax_overlaps_inds[positive_indices]].astype(int)] = 1
 
             regression_batch[index, :, :-1] = bbox_transform(anchors, annotations['bboxes'][argmax_overlaps_inds, :])
 
@@ -187,6 +187,7 @@ class XmlCarsAndTrucksGenerator(Generator):
         """ Number of classes in the dataset.
         """
         return max(self.classes.values()) + 1
+
 
     def has_label(self, label):
         """ Return True if label is a known label.
@@ -248,6 +249,17 @@ class XmlCarsAndTrucksGenerator(Generator):
 
         return annotations
 
+    def direction_num_classes(self):
+        return 2 # north, south
+
+    def direction_has_label(self, label):
+        """ Return True if label is a known label.
+        """
+        return label in [0,1]
+
+    def direction_has_name(self, name):
+        return label in ["north", "south"]
+
     # Extra methods for north/south
     def direction_name_to_label(self, direction):
         if direction == "north":
@@ -258,5 +270,7 @@ class XmlCarsAndTrucksGenerator(Generator):
     def label_to_direction_name(self, label):
         if label == 0:
             return "north"
-        else:
+        elif label == 1:
             return "south"
+        else:
+            raise Exception("Invalid label " + str(label))
