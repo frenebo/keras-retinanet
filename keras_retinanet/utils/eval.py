@@ -115,7 +115,7 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
 
         if using_direction:
             image_directions = predicted[3][0, indices[scores_sort]]
-            print(image_directions)
+            # print(image_directions)
 
         if save_path is not None:
             if not do_not_draw_annotations:
