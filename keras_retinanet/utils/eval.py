@@ -55,7 +55,7 @@ def _compute_ap(recall, precision):
     return ap
 
 
-def _get_detections(generator, model, score_threshold=0.05, max_detections=100, save_path=None, using_direction=False, do_not_draw_annotations=False):
+def _get_detections(generator, model, score_threshold=0.05, max_detections=100, save_path=None, using_direction=False, do_not_draw_annotations=False, score_direction=False):
     """ Get the detections from the model using the generator.
 
     The result is a list of lists such that the size is:
@@ -83,6 +83,9 @@ def _get_detections(generator, model, score_threshold=0.05, max_detections=100, 
         # run network
         predicted = model.predict_on_batch(np.expand_dims(image, axis=0))
         boxes, scores, labels = predicted[:3]
+
+        if score_direction:
+            labels = predicted[3]
 
         try:
             os.makedirs("detections")
@@ -206,7 +209,15 @@ def evaluate(
         A dict mapping class names to mAP scores.
     """
     # gather all detections and annotations
-    all_detections     = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=save_path, using_direction=using_direction, do_not_draw_annotations=do_not_draw_annotations)
+    all_detections     = _get_detections(
+        generator,
+        model,
+        score_threshold=score_threshold,
+        max_detections=max_detections,
+        save_path=save_path,
+        using_direction=using_direction,
+        do_not_draw_annotations=do_not_draw_annotations,
+        score_direction=score_direction)
     all_annotations    = _get_annotations(generator, score_direction=score_direction)
     average_precisions = {}
 
