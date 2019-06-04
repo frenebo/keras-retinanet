@@ -208,6 +208,15 @@ def evaluate(
     # Returns
         A dict mapping class names to mAP scores.
     """
+
+    if score_direction:
+        print("SCORING DIRECTION!")
+        generator.num_classes = generator.direction_num_classes
+        generator.has_label = generator.direction_has_label
+        generator.has_name = generator.direction_has_name
+        generator.name_to_label = generator.direction_name_to_label
+        generator.label_to_name = generator.label_to_direction_name
+
     # gather all detections and annotations
     all_detections     = _get_detections(
         generator,
@@ -228,13 +237,6 @@ def evaluate(
 
     # process detections and annotations
 
-    if score_direction:
-        print("SCORING DIRECTION!")
-        generator.num_classes = generator.direction_num_classes
-        generator.has_label = generator.direction_has_label
-        generator.has_name = generator.direction_has_name
-        generator.name_to_label = generator.direction_name_to_label
-        generator.label_to_name = generator.label_to_direction_name
 
     for label in range(generator.num_classes()):
         if not generator.has_label(label):
