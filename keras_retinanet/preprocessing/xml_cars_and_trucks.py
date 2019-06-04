@@ -207,7 +207,7 @@ class XmlCarsAndTrucksGenerator(Generator):
     def label_to_name(self, label):
         """ Map label to name.
         """
-        print("In label to name")
+        # print("In label to name")
         return self.labels[label]
 
     def image_path(self, image_index):
@@ -269,7 +269,7 @@ class XmlCarsAndTrucksGenerator(Generator):
             return 1
 
     def label_to_direction_name(self, label):
-        print("In label to direction name")
+        # print("In label to direction name")
         if label == 0:
             return "north"
         elif label == 1:
