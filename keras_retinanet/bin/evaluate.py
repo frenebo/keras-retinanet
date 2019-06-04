@@ -171,27 +171,27 @@ def main(args=None):
     if args.convert_model:
         model = models.convert_model(model, anchor_params=anchor_params, using_direction=args.using_direction)
 
-    # if args.score_direction:
-    #     if not args.using_direction:
-    #         raise Exception("Cannot score direction without --using-direction")
-    #     if args.dataset_type != 'xml':
-    #         raise Exception("Can only score direction with XML generator")
+    if args.score_direction:
+        if not args.using_direction:
+            raise Exception("Cannot score direction without --using-direction")
+        if args.dataset_type != 'xml':
+            raise Exception("Can only score direction with XML generator")
 
-    #     # boxes, scores, labels, directions
-    #     # becomes
-    #     # boxes, scores, directions, labels
-    #     swapped_outputs = [model.outputs[0], model.outputs[1], model.outputs[3], model.outputs[2]]
-    #     model_with_swapped_outputs = keras.models.Model(
-    #         inputs=model.inputs,
-    #         outputs=swapped_outputs
-    #     )
-    #     model = model_with_swapped_outputs
+        # boxes, scores, labels, directions
+        # becomes
+        # boxes, scores, directions, labels
+        swapped_outputs = [model.outputs[0], model.outputs[1], model.outputs[3], model.outputs[2]]
+        model_with_swapped_outputs = keras.models.Model(
+            inputs=model.inputs,
+            outputs=swapped_outputs
+        )
+        model = model_with_swapped_outputs
 
-        # generator.num_classes = generator.direction_num_classes
-        # generator.has_label = generator.direction_has_label
-        # generator.has_name = generator.direction_has_name
-        # generator.name_to_label = generator.direction_name_to_label
-        # generator.label_to_name = generator.label_to_direction_name
+        generator.num_classes = generator.direction_num_classes
+        generator.has_label = generator.direction_has_label
+        generator.has_name = generator.direction_has_name
+        generator.name_to_label = generator.direction_name_to_label
+        generator.label_to_name = generator.label_to_direction_name
 
     # print model summary
     # print(model.summary())
