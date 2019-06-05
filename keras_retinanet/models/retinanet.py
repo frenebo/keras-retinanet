@@ -159,7 +159,7 @@ def __create_pyramid_features(C3, C4, C5, feature_size=256):
     P7 = keras.layers.Activation('relu', name='C6_relu')(P6)
     P7 = keras.layers.Conv2D(feature_size, kernel_size=3, strides=2, padding='same', name='P7')(P7)
 
-    return [P6, P7] # [P3, P4, P5, P6, P7]
+    return [P5, P6, P7] # [P3, P4, P5, P6, P7]
 
 
 def default_submodels(num_classes, num_anchors):
@@ -328,7 +328,7 @@ def retinanet_bbox(
         assert_training_model(model)
 
     # compute the anchors
-    features = [model.get_layer(p_name).output for p_name in ['P6', 'P7']] # ['P3', 'P4', 'P5', 'P6', 'P7']]
+    features = [model.get_layer(p_name).output for p_name in ['P5', 'P6', 'P7']] # ['P3', 'P4', 'P5', 'P6', 'P7']]
     anchors  = __build_anchors(anchor_params, features)
 
     # we expect the anchors, regression and classification values as first output
