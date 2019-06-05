@@ -143,10 +143,6 @@ def north_south_anchor_targets_bbox(
             directions_batch[index, indices, -1] = -1
             regression_batch[index, indices, -1] = -1
 
-    # print("regression_batch: ", regression_batch.shape)
-    # print("labels_batch: ", labels_batch)
-    # print("directions_batch: ", directions_batch)
-
     return regression_batch, labels_batch, directions_batch
 
 class XmlCarsAndTrucksGenerator(Generator):
@@ -207,7 +203,6 @@ class XmlCarsAndTrucksGenerator(Generator):
     def label_to_name(self, label):
         """ Map label to name.
         """
-        # print("In label to name")
         return self.labels[label]
 
     def image_path(self, image_index):
@@ -269,7 +264,6 @@ class XmlCarsAndTrucksGenerator(Generator):
             return 1
 
     def label_to_direction_name(self, label):
-        # print("In label to direction name")
         if label == 0:
             return "north"
         elif label == 1:
