@@ -59,12 +59,12 @@ AnchorParameters.default = AnchorParameters(
     ],
     ratios  = np.array([
         # 0.5,
-        # 1,
+        1,
         2,
     ], keras.backend.floatx()),
     scales  = np.array([
-        # 2 ** 0,
-        # 2 ** (1.0 / 3.0),
+        2 ** 0,
+        2 ** (1.0 / 3.0),
         2 ** (2.0 / 3.0),
     ], keras.backend.floatx()),
 )
