@@ -58,13 +58,13 @@ AnchorParameters.default = AnchorParameters(
         128,
     ],
     ratios  = np.array([
-        0.5,
-        1,
+        # 0.5,
+        # 1,
         2,
     ], keras.backend.floatx()),
     scales  = np.array([
-        2 ** 0,
-        2 ** (1.0 / 3.0),
+        # 2 ** 0,
+        # 2 ** (1.0 / 3.0),
         2 ** (2.0 / 3.0),
     ], keras.backend.floatx()),
 )
@@ -237,7 +237,7 @@ def anchors_for_shape(
     """
 
     if pyramid_levels is None:
-        pyramid_levels = [5, 6, 7] # [3, 4, 5, 6, 7]
+        pyramid_levels = [4, 5, 6, 7] # [3, 4, 5, 6, 7]
 
     if anchor_params is None:
         anchor_params = AnchorParameters.default
