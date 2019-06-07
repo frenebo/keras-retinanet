@@ -191,7 +191,8 @@ def __build_model_pyramid(name, model, features):
     Returns
         A tensor containing the response from the submodel on the FPN features.
     """
-    return keras.layers.Concatenate(axis=1, name=name)([model(f) for f in features])
+    return [model(f) for f in features][0]
+    # return keras.layers.Concatenate(axis=1, name=name)([model(f) for f in features])
 
 
 def __build_pyramid(models, features):
@@ -232,7 +233,9 @@ def __build_anchors(anchor_parameters, features):
         )(f) for i, f in enumerate(features)
     ]
 
-    return keras.layers.Concatenate(axis=1, name='anchors')(anchors)
+    return anchors[0]
+    # return keras.layers.Concatenate(axis=1, name='anchors')(anchors)
+
 
 
 def retinanet(
