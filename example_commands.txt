@@ -1,0 +1,48 @@
+1. Visualize anchor boxes with **retinanet_easy**
+a. create random model
+
+python3 retinanet_easy/train.py modelname.h5 --epochs 1 --steps_per_epoch 1
+--batch_size 1 csv . example_annotations.csv example_class_maps.csv
+
+head example_annotations.csv
+images/cat.jpg,10,10,20,20,cat
+pjk@pjk-VirtualBox:~/Documents$ head example_class_maps.csv
+dog,0
+cat,1
+
+(may not need both)
+
+b. Visualize
+python3 retinanet_easy/visualize.py <modelname.h5> <images diretory> example_class_maps.csv
+
+2. Multiple heads
+a. modify "train.py"
+b. new generaror to create new training data
+c. new post-processing for extra heads in bbox layers
+d. new loss function for new heads during compilation
+e. modify eval.py options to score new heads
+note: search keras-retinanet for "using_direction" to see where changes are made
+
+3. Change anchor box params at utils/anchors.py
+
+4. Change pyramid connections
+a. define pyramid layers in retinanet.py
+b. If different number of layers:
+- define/change anchor box params in AnchorParameters.default in anchors.py
+- change pyramid numbers from [3, 4, 5, 6, 7] in anchors_for_shape in anchors.py
+- Change return of __create_pyramid_features in retinanet.py
+- Change pyramid name list from ['P3', 'P4', 'P5', 'P6', 'P7'] in retinanet_bbox in retinanet.py
+
+
+5. Create new backbone model
+  a. Create backbone class that extends Backbone (which is defined in models/__init__.py)
+  b. in backbone method in models/__init__.py, add your backbone
+  Find example in models/otherbackbone.py
+
+6. train with
+    bin/train.py
+
+   predict with bin/evaluate.py
+
+7. Some training/testing results in /home/tjena/InnovationWeek2019/scored_eval_DO_NOT_DELETE
+
