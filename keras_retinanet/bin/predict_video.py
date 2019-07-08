@@ -126,7 +126,6 @@ if __name__ == "__main__":
     if args.cuda_visible_devices is not None:
         os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda_visible_devices
 
-    anchor_config = retinanet.default_anchor_config
 
     # model = load_retinanet(args.prediction_model)
     model = models.load_model(args.prediction_model, backbone_name=args.backbone)
