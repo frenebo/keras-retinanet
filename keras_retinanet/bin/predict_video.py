@@ -15,6 +15,7 @@ from ..preprocessing.generator import Generator
 from .. import models
 from ..utils.image import resize_image
 from ..utils.visualization import draw_detections
+from ..preprocessing.csv_generator import _read_classes
 
 
 def get_video_framerate(video_capture):
@@ -96,10 +97,9 @@ def bbox_detect_image(
     return labeled_image
 
 def csv_label_to_name_func(csv_classes_path):
-    from retinanet_easy.generators.csv_generator import read_csv_classes
 
     with open(csv_classes_path, 'r', newline='') as csv_file:
-        classes = read_csv_classes(csv.reader(csv_file, delimiter=','))
+        classes = _read_classes(csv.reader(csv_file, delimiter=','))
 
     labels =  {}
     for key, value in classes.items():
