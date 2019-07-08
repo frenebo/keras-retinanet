@@ -3,6 +3,7 @@ import cv2
 import csv
 import progressbar
 import os
+import sys
 
 # Allow relative imports when being executed as script.
 if __name__ == "__main__" and __package__ is None:
