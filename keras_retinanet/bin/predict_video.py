@@ -50,7 +50,7 @@ def bbox_detect_image(
     label_to_direction_name=None, # Should also be from generator
     print_averages=False,
     ):
-    preprocess_image = models.backbone(backbone_name)().preprocess_image
+    preprocess_image = models.backbone(backbone_name).preprocess_image
 
     image        = preprocess_image(raw_image.copy())
     image, scale = resize_image(image)
