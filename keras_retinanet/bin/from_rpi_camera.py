@@ -75,8 +75,6 @@ def main():
     parser.add_argument("--score_threshold", default=0.05, type=float, help="Threshold for displaying a result")
     args = parser.parse_args()
 
-    model = models.load_model(args.prediction_model, backbone_name=args.backbone)
-    bbox_model = models.convert_model(model, using_direction=False)
 
     stream_string = gstreamer_pipeline(flip_method=0)
     print(stream_string)
@@ -84,6 +82,9 @@ def main():
 
     if not cap.isOpened():
         raise Exception("Unable to open camera")
+
+    model = models.load_model(args.prediction_model, backbone_name=args.backbone)
+    bbox_model = models.convert_model(model, using_direction=False)
 
     for image_out in yield_frames(
             cap=cap,
