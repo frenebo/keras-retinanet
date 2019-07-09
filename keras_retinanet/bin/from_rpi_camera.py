@@ -149,7 +149,7 @@ def main():
             # Stop the program on the ESC key
             if keyCode == 27:
                 break
-    except Exception:
+    except:
         cap.release()
         raise
 
