@@ -82,7 +82,7 @@ def main():
 
     stream_string = gstreamer_pipeline(flip_method=0)
     print(stream_string)
-    cap = cv2.VideoCapture(0, cv2.CAP_V4L)
+    cap = cv2.VideoCapture(0)
 
     if not cap.isOpened():
         raise Exception("Unable to open camera")
