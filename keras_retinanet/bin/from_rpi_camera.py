@@ -1,5 +1,5 @@
 import cv2
-
+import time
 
 def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=60, flip_method=0) :
     return ('nvarguscamerasrc ! '
@@ -31,7 +31,7 @@ def main():
         if keyCode == 27:
             break
 
-        sleep(1)
+        time.sleep(1)
 
     cap.release()
     cv2.destroyAllWindows()
