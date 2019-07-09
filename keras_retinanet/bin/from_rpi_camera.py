@@ -22,6 +22,7 @@ def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=12
 
 def yield_frames(
     capture, # video capture
+    prediction_model, # model with bbox layers
     ):
     # Codec is just a series of jpegs that make up a video
 
@@ -51,8 +52,7 @@ def main():
 
     for image_out in yield_frames(
             capture=cap,
-            bbox_model,
-
+            prediction_model=bbox_model,
         ):
         cv2.imshow("CSI Camera", image_out)
         keyCode =  cv2.waitKey(30) & 0xff
