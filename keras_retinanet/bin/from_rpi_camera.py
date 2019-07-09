@@ -37,13 +37,13 @@ def yield_frames(
 def main():
     parser = argparse.ArgumentParser(description='Predict Camera input')
     parser.add_argument("prediction_model", type=str, help="Path to prediction model")
-    parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
     parser.add_argument("csv_classes", type=str, help="CSV file with class names.")
+    parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
     parser.add_argument("--score_threshold", default=0.05, type=float, help="Threshold for displaying a result")
     args = parser.parse_args()
 
     model = models.load_model(args.prediction_model, backbone_name=args.backbone)
-    bbox_model = models.convert_model(model, using_direction=args.using_direction)
+    bbox_model = models.convert_model(model, using_direction=False)
 
     stream_string = gstreamer_pipeline(flip_method=0)
     print(stream_string)
