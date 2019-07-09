@@ -27,7 +27,7 @@ def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=12
 
 def yield_frames(
     cap, # video capture
-    bbox_model, # model with bbox layers
+    # bbox_model, # model with bbox layers
     backbone_name,
     csv_classes_path,
     max_detections=100,
@@ -88,12 +88,12 @@ def main():
     if not cap.isOpened():
         raise Exception("Unable to open camera")
 
-    model = models.load_model(args.prediction_model, backbone_name=args.backbone)
-    bbox_model = models.convert_model(model, using_direction=False)
+    # model = models.load_model(args.prediction_model, backbone_name=args.backbone)
+    # bbox_model = models.convert_model(model, using_direction=False)
 
     for image_out in yield_frames(
             cap=cap,
-            bbox_model=bbox_model,
+            # bbox_model=bbox_model,
             backbone_name=args.backbone,
             csv_classes_path=args.csv_classes,
             score_threshold=args.score_threshold,
