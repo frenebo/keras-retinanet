@@ -79,6 +79,7 @@ def yield_frames(
     #     print(op.name)     # <--- printing the operations snapshot below
     print("Printing operations")
     for op in ts_sess.graph.get_operations():
+        print("Op:")
         print(op.name)
 
     raise Exception("Done")
