@@ -62,7 +62,7 @@ def yield_frames(
     for op in tf_sess.graph.get_operations():
         print(op.name)     # <--- printing the operations snapshot below
 
-    exit(0)
+    raise Exception("Done")
 
     while True:
         _, raw_image = cap.read()
@@ -151,6 +151,7 @@ def main():
                 break
     except:
         cap.release()
+        cv2.destroyAllWindows()
         raise
 
 
