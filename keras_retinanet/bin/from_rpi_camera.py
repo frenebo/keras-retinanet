@@ -21,7 +21,7 @@ def gstreamer_pipeline(
     capture_height=360,
     display_width=640,
     display_height=360,
-    framerate=15,
+    framerate=8,
     flip_method=0):
 
     return (
@@ -77,8 +77,9 @@ def yield_frames(
 
     # for op in tf_sess.graph.get_operations():
     #     print(op.name)     # <--- printing the operations snapshot below
+    print("Printing operations")
     for op in ts_sess.graph.get_operations():
-        print(op.name(), op.value())
+        print(op.name)
 
     raise Exception("Done")
 
