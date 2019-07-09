@@ -71,9 +71,9 @@ def yield_frames(
     preprocess_image = models.backbone(backbone_name).preprocess_image
     label_to_name = csv_label_to_name_func(csv_classes_path)
 
-    # boxes_tensor = tf_sess.graph.get_tensor_by_name("prefix/ident_boxes/Identity:0")
-    # scores_tensor = tf_sess.graph.get_tensor_by_name("prefix/ident_scores/Identity:0")
-    # labels_tensor = tf_sess.graph.get_tensor_by_name("prefix/ident_labels/Identity:0")
+    boxes_tensor = tf_sess.graph.get_tensor_by_name("ident_boxes/Identity:0")
+    scores_tensor = tf_sess.graph.get_tensor_by_name("ident_scores/Identity:0")
+    labels_tensor = tf_sess.graph.get_tensor_by_name("ident_labels/Identity:0")
 
     # for op in tf_sess.graph.get_operations():
     #     print(op.name)     # <--- printing the operations snapshot below
