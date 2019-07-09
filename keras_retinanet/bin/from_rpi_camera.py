@@ -35,7 +35,7 @@ def yield_frames(
         yield img
 
 def main():
-    parser = argparse.ArgumentParser(description='Predict video')
+    parser = argparse.ArgumentParser(description='Predict Camera input')
     parser.add_argument("prediction_model", type=str, help="Path to prediction model")
     parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
     parser.add_argument("csv_classes", type=str, help="CSV file with class names.")
