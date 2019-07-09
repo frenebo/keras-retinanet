@@ -16,7 +16,14 @@ from .predict_video import get_video_dims, csv_label_to_name_func
 from ..utils.image import resize_image
 from ..utils.visualization import draw_detections
 
-def gstreamer_pipeline (capture_width=640, capture_height=360, display_width=1280, display_height=720, framerate=15, flip_method=0) :
+def gstreamer_pipeline(
+    capture_width=640,
+    capture_height=360,
+    display_width=1280,
+    display_height=720,
+    framerate=15,
+    flip_method=0):
+
     return ('nvarguscamerasrc ! '
     'video/x-raw(memory:NVMM), '
     'width=(int)%d, height=(int)%d, '
