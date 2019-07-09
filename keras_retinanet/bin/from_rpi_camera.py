@@ -56,6 +56,10 @@ def yield_frames(
     preprocess_image = models.backbone(backbone_name).preprocess_image
     label_to_name = csv_label_to_name_func(csv_classes_path)
 
+    boxes_tensor = tf_sess.graph.get_tensor_by_name("prefix/ident_boxes/Identity:0")
+    scores_tensor = tf_sess.graph.get_tensor_by_name("prefix/ident_scores/Identity:0")
+    labels_tensor = tf_sess.graph.get_tensor_by_name("prefix/ident_labels/Identity:0")
+
     while True:
         _, raw_image = cap.read()
         # time.sleep(0.2)
@@ -68,8 +72,10 @@ def yield_frames(
             "input_1": image
         }
 
-        preds = tf_sess.run(output_tensor, feed_dict)
-        print(type(preds))
+        boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
+        print("boxes: ", boxes.shape)
+        print("scores: ", scores.shape)
+        print("labels: ", labels.shape)
 
         # print("Read and preprocessed image")
 
