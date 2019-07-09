@@ -41,39 +41,40 @@ def yield_frames(
     while True:
         _, raw_image = cap.read()
         # print(img.shape)
-        image        = preprocess_image(raw_image.copy())
-        image, scale = resize_image(image)
+        # image        = preprocess_image(raw_image.copy())
+        # image, scale = resize_image(image)
 
-        print("Read and preprocessed image")
+        # print("Read and preprocessed image")
 
-        predicted = bbox_model.predict_on_batch(np.expand_dims(image, axis=0))
-        print("Predicted image")
-        boxes, scores, labels = predicted[:3]
+        # predicted = bbox_model.predict_on_batch(np.expand_dims(image, axis=0))
+        # print("Predicted image")
+        # boxes, scores, labels = predicted[:3]
 
-        boxes /= scale
-        indices = np.where(scores[0, :] > score_threshold)[0]
+        # boxes /= scale
+        # indices = np.where(scores[0, :] > score_threshold)[0]
 
-        scores = scores[0][indices]
-        scores_sort = np.argsort(-scores)[:max_detections]
+        # scores = scores[0][indices]
+        # scores_sort = np.argsort(-scores)[:max_detections]
 
-        image_boxes      = boxes[0, indices[scores_sort], :]
-        image_scores     = scores[scores_sort]
-        image_labels     = labels[0, indices[scores_sort]]
+        # image_boxes      = boxes[0, indices[scores_sort], :]
+        # image_scores     = scores[scores_sort]
+        # image_labels     = labels[0, indices[scores_sort]]
 
-        draw_detections(
-            raw_image,
-            image_boxes,
-            image_scores,
-            image_labels,
-            label_to_name=label_to_name)
+        # draw_detections(
+        #     raw_image,
+        #     image_boxes,
+        #     image_scores,
+        #     image_labels,
+        #     label_to_name=label_to_name)
 
-        print("Labeled image")
+        # print("Labeled image")
 
         yield raw_image
 
 def main():
     parser = argparse.ArgumentParser(description='Predict Camera input')
     parser.add_argument("prediction_model", type=str, help="Path to prediction model")
+    # parser.add_argument("")
     parser.add_argument("csv_classes", type=str, help="CSV file with class names.")
     parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
     parser.add_argument("--score_threshold", default=0.05, type=float, help="Threshold for displaying a result")
