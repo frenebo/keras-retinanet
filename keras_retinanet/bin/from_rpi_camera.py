@@ -2,6 +2,8 @@ import cv2
 import sys
 import os
 import argparse
+import numpy as np
+from ..utils.visualization import draw_detections
 
 # Allow relative imports when being executed as script.
 if __name__ == "__main__" and __package__ is None:
