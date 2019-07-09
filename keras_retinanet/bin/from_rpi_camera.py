@@ -51,7 +51,7 @@ def yield_frames(
     tf_config = tf.ConfigProto()
     tf_config.gpu_options.allow_growth = True
     tf_sess = tf.Session(config=tf_config)
-    tf.import_graph_def(trt_graph, name='')
+    tf.import_graph_def(graph_def, name='')
 
     preprocess_image = models.backbone(backbone_name).preprocess_image
     label_to_name = csv_label_to_name_func(csv_classes_path)
@@ -124,6 +124,7 @@ def main():
 
     for image_out in yield_frames(
             cap=cap,
+            graph_def=graph_def,
             # bbox_model=bbox_model,
             backbone_name=args.backbone,
             csv_classes_path=args.csv_classes,
