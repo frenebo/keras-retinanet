@@ -3,6 +3,7 @@ import sys
 import os
 import argparse
 import numpy as np
+import tensorflow as tf
 
 # Allow relative imports when being executed as script.
 if __name__ == "__main__" and __package__ is None:
@@ -25,8 +26,19 @@ def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=12
     'videoconvert ! '
     'video/x-raw, format=(string)BGR ! appsink'  % (capture_width,capture_height,framerate,flip_method,display_width,display_height))
 
+
+def load_graph_def(frozen_graph_filename):
+    # We load the protobuf file from the disk and parse it to retrieve the
+    # unserialized graph_def
+    with tf.gfile.GFile(frozen_graph_filename, "rb") as f:
+        graph_def = tf.GraphDef()
+        graph_def.ParseFromString(f.read())
+
+    return graph_def
+
 def yield_frames(
     cap, # video capture
+    graph_def,
     # bbox_model, # model with bbox layers
     backbone_name,
     csv_classes_path,
@@ -35,15 +47,29 @@ def yield_frames(
     ):
     # Codec is just a series of jpegs that make up a video
 
+
+    tf_config = tf.ConfigProto()
+    tf_config.gpu_options.allow_growth = True
+    tf_sess = tf.Session(config=tf_config)
+    tf.import_graph_def(trt_graph, name='')
+
     preprocess_image = models.backbone(backbone_name).preprocess_image
     label_to_name = csv_label_to_name_func(csv_classes_path)
-    import time
+
     while True:
         _, raw_image = cap.read()
-        time.sleep(0.2)
+        # time.sleep(0.2)
         # print(img.shape)
-        # image        = preprocess_image(raw_image.copy())
-        # image, scale = resize_image(image)
+        image        = preprocess_image(raw_image.copy())
+        image, scale = resize_image(image)
+
+
+        feed_dict = {
+            "input_1": image
+        }
+
+        preds = tf_sess.run(output_tensor, feed_dict)
+        print(type(preds))
 
         # print("Read and preprocessed image")
 
@@ -74,7 +100,7 @@ def yield_frames(
 
 def main():
     parser = argparse.ArgumentParser(description='Predict Camera input')
-    parser.add_argument("prediction_model", type=str, help="Path to prediction model")
+    parser.add_argument("prediction_model", type=str, help="Path to TensorRT prediction model")
     # parser.add_argument("")
     parser.add_argument("csv_classes", type=str, help="CSV file with class names.")
     parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
@@ -89,6 +115,7 @@ def main():
     if not cap.isOpened():
         raise Exception("Unable to open camera")
 
+    graph_def = load_graph_def(args.predict_model)
     # model = models.load_model(args.prediction_model, backbone_name=args.backbone)
     # bbox_model = models.convert_model(model, using_direction=False)
 
