@@ -78,13 +78,13 @@ def yield_frames(
     # for op in tf_sess.graph.get_operations():
     #     print(op.name)     # <--- printing the operations snapshot below
     print("Printing operations")
-    for op in ts_sess.graph.get_operations():
+    for op in tf_sess.graph.get_operations():
         print("Op:")
         print(op.name)
 
     raise Exception("Done")
 
-    while True:
+    while cv2.getWindowProperty('CSI Camera',0) >= 0:
         _, raw_image = cap.read()
         # time.sleep(0.2)
         # print(img.shape)
