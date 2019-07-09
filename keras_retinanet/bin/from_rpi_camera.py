@@ -3,7 +3,6 @@ import sys
 import os
 import argparse
 import numpy as np
-from ..utils.visualization import draw_detections
 
 # Allow relative imports when being executed as script.
 if __name__ == "__main__" and __package__ is None:
@@ -14,6 +13,7 @@ if __name__ == "__main__" and __package__ is None:
 from .. import models
 from .predict_video import get_video_dims, csv_label_to_name_func
 from ..utils.image import resize_image
+from ..utils.visualization import draw_detections
 
 def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=60, flip_method=0) :
     return ('nvarguscamerasrc ! '
