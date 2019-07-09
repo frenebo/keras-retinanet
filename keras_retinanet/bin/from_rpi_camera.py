@@ -21,15 +21,18 @@ def main():
         raise Exception("Unable to open camera")
 
     window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
-    # Window
+
     while cv2.getWindowProperty('CSI Camera',0) >= 0:
         ret_val, img = cap.read();
         cv2.imshow('CSI Camera',img)
-    # This also acts as
         keyCode = cv2.waitKey(30) & 0xff
+
         # Stop the program on the ESC key
         if keyCode == 27:
             break
+
+        sleep(1)
+
     cap.release()
     cv2.destroyAllWindows()
 
