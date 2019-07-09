@@ -30,6 +30,7 @@ def yield_frames(
     bbox_model, # model with bbox layers
     backbone_name,
     csv_classes_path,
+    score_threshold=0.05, # threshold score for showing prediction
     ):
     # Codec is just a series of jpegs that make up a video
 
@@ -89,6 +90,7 @@ def main():
             bbox_model=bbox_model,
             backbone_name=args.backbone,
             csv_classes_path=args.csv_classes,
+            score_threshold=args.score_threshold,
         ):
         cv2.imshow("CSI Camera", image_out)
         keyCode =  cv2.waitKey(30) & 0xff
