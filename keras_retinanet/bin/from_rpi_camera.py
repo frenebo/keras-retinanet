@@ -25,7 +25,7 @@ def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=12
 
 def yield_frames(
     cap, # video capture
-    prediction_model, # model with bbox layers
+    bbox_model, # model with bbox layers
     backbone_name,
     csv_classes_path,
     ):
@@ -84,7 +84,7 @@ def main():
 
     for image_out in yield_frames(
             cap=cap,
-            prediction_model=bbox_model,
+            bbox_model=bbox_model,
             backbone_name=args.backbone,
             csv_classes_path=args.csv_classes,
         ):
