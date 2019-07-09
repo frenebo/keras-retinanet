@@ -10,7 +10,8 @@ if __name__ == "__main__" and __package__ is None:
     __package__ = "keras_retinanet.bin"
 
 from .. import models
-from .predict_video import get_video_dims
+from .predict_video import get_video_dims, csv_label_to_name_func
+from ..utils.image import resize_image
 
 def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=60, flip_method=0) :
     return ('nvarguscamerasrc ! '
@@ -25,14 +26,43 @@ def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=12
 def yield_frames(
     cap, # video capture
     prediction_model, # model with bbox layers
+    backbone_name,
+    csv_classes_path,
     ):
     # Codec is just a series of jpegs that make up a video
 
-    while True:
-        ret_val, img = cap.read()
-        print(img.shape)
+    preprocess_image = models.backbone(backbone_name).preprocess_image
+    label_to_name = csv_label_to_name_func(csv_classes_path)
 
-        yield img
+    while True:
+        _, raw_image = cap.read()
+        # print(img.shape)
+        image        = preprocess_image(raw_image.copy())
+        image, scale = resize_image(image)
+
+        predicted = bbox_model.predict_on_batch(np.expand_dims(image, axis=0))
+        boxes, scores, labels = predicted[:3]
+
+        boxes /= scale
+        indices = np.where(scores[0, :] > score_threshold)[0]
+
+        scores = scores[0][indices]
+        scores_sort = np.argsort(-scores)[:max_detections]
+
+        image_boxes      = boxes[0, indices[scores_sort], :]
+        image_scores     = scores[scores_sort]
+        image_labels     = labels[0, indices[scores_sort]]
+        if using_direction:
+            image_directions = directions[0, indices[scores_sort]]
+
+        draw_detections(
+            raw_image,
+            image_boxes,
+            image_scores,
+            image_labels,
+            label_to_name=label_to_name)
+
+        yield raw_image
 
 def main():
     parser = argparse.ArgumentParser(description='Predict Camera input')
@@ -55,6 +85,8 @@ def main():
     for image_out in yield_frames(
             cap=cap,
             prediction_model=bbox_model,
+            backbone_name=args.backbone,
+            csv_classes_path=args.csv_classes,
         ):
         cv2.imshow("CSI Camera", image_out)
         keyCode =  cv2.waitKey(30) & 0xff
