@@ -129,7 +129,7 @@ def main():
 
     graph_def = load_graph_def(args.prediction_model)
 
-    cap = cv2.VideoCapture(stream_string, cv2.CAP_GSTREAMER)
+    cap = cv2.VideoCapture(stream_string, cv2.CAP_V4L2)
 
     if not cap.isOpened():
         raise Exception("Unable to open camera")
