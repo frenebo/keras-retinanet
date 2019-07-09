@@ -153,8 +153,14 @@ def main():
             if keyCode == 27:
                 break
     except:
+        print("Releasing cap")
         cap.release()
+        print("Done releasing cap")
+
+        print("Destroying windows")
         cv2.destroyAllWindows()
+        print("Done destroying windows")
+
         raise
 
 
