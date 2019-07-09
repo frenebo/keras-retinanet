@@ -30,6 +30,7 @@ def yield_frames(
     bbox_model, # model with bbox layers
     backbone_name,
     csv_classes_path,
+    max_detections=100,
     score_threshold=0.05, # threshold score for showing prediction
     ):
     # Codec is just a series of jpegs that make up a video
