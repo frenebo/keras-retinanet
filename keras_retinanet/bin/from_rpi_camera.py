@@ -16,7 +16,7 @@ from .predict_video import get_video_dims, csv_label_to_name_func
 from ..utils.image import resize_image
 from ..utils.visualization import draw_detections
 
-def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=60, flip_method=0) :
+def gstreamer_pipeline (capture_width=640, capture_height=360, display_width=1280, display_height=720, framerate=15, flip_method=0) :
     return ('nvarguscamerasrc ! '
     'video/x-raw(memory:NVMM), '
     'width=(int)%d, height=(int)%d, '
@@ -129,7 +129,7 @@ def main():
 
     graph_def = load_graph_def(args.prediction_model)
 
-    cap = cv2.VideoCapture(stream_string, cv2.CAP_V4L2)
+    cap = cv2.VideoCapture(stream_string, cv2.CAP_GSTREAMER)
 
     if not cap.isOpened():
         raise Exception("Unable to open camera")
