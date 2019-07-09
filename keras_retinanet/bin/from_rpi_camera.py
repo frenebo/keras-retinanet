@@ -131,23 +131,25 @@ def main():
     graph_def = load_graph_def(args.prediction_model)
     # model = models.load_model(args.prediction_model, backbone_name=args.backbone)
     # bbox_model = models.convert_model(model, using_direction=False)
+    try:
+        for image_out in yield_frames(
+                cap=cap,
+                graph_def=graph_def,
+                # bbox_model=bbox_model,
+                backbone_name=args.backbone,
+                csv_classes_path=args.csv_classes,
+                score_threshold=args.score_threshold,
+            ):
+            cv2.imshow("CSI Camera", image_out)
+            print("Displayed image")
+            keyCode =  cv2.waitKey(30) & 0xff
 
-    for image_out in yield_frames(
-            cap=cap,
-            graph_def=graph_def,
-            # bbox_model=bbox_model,
-            backbone_name=args.backbone,
-            csv_classes_path=args.csv_classes,
-            score_threshold=args.score_threshold,
-        ):
-        cv2.imshow("CSI Camera", image_out)
-        print("Displayed image")
-        keyCode =  cv2.waitKey(30) & 0xff
-
-        # Stop the program on the ESC key
-        if keyCode == 27:
-            break
-
+            # Stop the program on the ESC key
+            if keyCode == 27:
+                break
+    except Exception:
+        cap.release()
+        raise
 
 
 
