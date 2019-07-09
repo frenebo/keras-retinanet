@@ -37,9 +37,10 @@ def yield_frames(
 
     preprocess_image = models.backbone(backbone_name).preprocess_image
     label_to_name = csv_label_to_name_func(csv_classes_path)
-
+    import time
     while True:
         _, raw_image = cap.read()
+        time.sleep(0.2)
         # print(img.shape)
         # image        = preprocess_image(raw_image.copy())
         # image, scale = resize_image(image)
