@@ -115,7 +115,7 @@ def main():
     if not cap.isOpened():
         raise Exception("Unable to open camera")
 
-    graph_def = load_graph_def(args.predict_model)
+    graph_def = load_graph_def(args.prediction_model)
     # model = models.load_model(args.prediction_model, backbone_name=args.backbone)
     # bbox_model = models.convert_model(model, using_direction=False)
 
