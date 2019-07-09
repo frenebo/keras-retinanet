@@ -123,12 +123,14 @@ def main():
 
     stream_string = gstreamer_pipeline(flip_method=0)
     print(stream_string)
+
+    graph_def = load_graph_def(args.prediction_model)
+
     cap = cv2.VideoCapture(stream_string, cv2.CAP_GSTREAMER)
 
     if not cap.isOpened():
         raise Exception("Unable to open camera")
 
-    graph_def = load_graph_def(args.prediction_model)
     # model = models.load_model(args.prediction_model, backbone_name=args.backbone)
     # bbox_model = models.convert_model(model, using_direction=False)
     try:
