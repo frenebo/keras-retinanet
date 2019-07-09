@@ -62,8 +62,8 @@ def yield_frames(
 
     # for op in tf_sess.graph.get_operations():
     #     print(op.name)     # <--- printing the operations snapshot below
-    for op in ts_sess.graph.get_operations():
-        print (op.name(), op.value()
+    # for op in ts_sess.graph.get_operations():
+    #     print (op.name(), op.value())
 
     raise Exception("Done")
 
