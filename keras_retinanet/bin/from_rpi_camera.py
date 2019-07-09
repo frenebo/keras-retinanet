@@ -107,6 +107,9 @@ def main():
     parser.add_argument("--score_threshold", default=0.05, type=float, help="Threshold for displaying a result")
     args = parser.parse_args()
 
+    if args.prediction_model.endswith(".h5"):
+        raise TypeError("Model should be a .pb file")
+
 
     stream_string = gstreamer_pipeline(flip_method=0)
     print(stream_string)
