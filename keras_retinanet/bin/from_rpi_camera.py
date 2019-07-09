@@ -44,7 +44,10 @@ def yield_frames(
         image        = preprocess_image(raw_image.copy())
         image, scale = resize_image(image)
 
+        print("Read and preprocessed image")
+
         predicted = bbox_model.predict_on_batch(np.expand_dims(image, axis=0))
+        print("Predicted image")
         boxes, scores, labels = predicted[:3]
 
         boxes /= scale
@@ -63,6 +66,8 @@ def yield_frames(
             image_scores,
             image_labels,
             label_to_name=label_to_name)
+
+        print("Labeled image")
 
         yield raw_image
 
@@ -93,6 +98,7 @@ def main():
             score_threshold=args.score_threshold,
         ):
         cv2.imshow("CSI Camera", image_out)
+        print("Displayed image")
         keyCode =  cv2.waitKey(30) & 0xff
 
         # Stop the program on the ESC key
