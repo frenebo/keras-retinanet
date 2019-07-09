@@ -56,8 +56,6 @@ def yield_frames(
         image_boxes      = boxes[0, indices[scores_sort], :]
         image_scores     = scores[scores_sort]
         image_labels     = labels[0, indices[scores_sort]]
-        if using_direction:
-            image_directions = directions[0, indices[scores_sort]]
 
         draw_detections(
             raw_image,
