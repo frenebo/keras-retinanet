@@ -19,8 +19,8 @@ from ..utils.visualization import draw_detections
 def gstreamer_pipeline(
     capture_width=640,
     capture_height=360,
-    display_width=1280,
-    display_height=720,
+    display_width=640,
+    display_height=360,
     framerate=15,
     flip_method=0):
 
