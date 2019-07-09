@@ -23,14 +23,14 @@ def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=12
     'video/x-raw, format=(string)BGR ! appsink'  % (capture_width,capture_height,framerate,flip_method,display_width,display_height))
 
 def yield_frames(
-    capture, # video capture
+    cap, # video capture
     prediction_model, # model with bbox layers
     ):
     # Codec is just a series of jpegs that make up a video
 
     while True:
         ret_val, img = cap.read()
-        print(img)
+        print(img.shape)
 
         yield img
 
@@ -53,7 +53,7 @@ def main():
         raise Exception("Unable to open camera")
 
     for image_out in yield_frames(
-            capture=cap,
+            cap=cap,
             prediction_model=bbox_model,
         ):
         cv2.imshow("CSI Camera", image_out)
