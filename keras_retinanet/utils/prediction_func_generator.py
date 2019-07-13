@@ -80,12 +80,12 @@ def generate_prediction_func(
 
         ret_img = raw_image.copy()
 
-        draw_detections(
-            ret_img,
-            image_boxes,
-            image_scores,
-            image_labels,
-            label_to_name=label_to_name)
+        # draw_detections(
+        #     ret_img,
+        #     image_boxes,
+        #     image_scores,
+        #     image_labels,
+        #     label_to_name=label_to_name)
 
         return ret_img
 
