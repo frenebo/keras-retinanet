@@ -63,29 +63,29 @@ def generate_prediction_func(
             "input_1:0": image
         }
 
-        # boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
+        boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
         # print("boxes: ", boxes.shape)
         # print("scores: ", scores.shape)
         # print("labels: ", labels.shape)
 
-        # boxes /= scale
-        # indices = np.where(scores[0, :] > score_threshold)[0]
+        boxes /= scale
+        indices = np.where(scores[0, :] > score_threshold)[0]
 
-        # scores = scores[0][indices]
-        # scores_sort = np.argsort(-scores)[:max_detections]
+        scores = scores[0][indices]
+        scores_sort = np.argsort(-scores)[:max_detections]
 
-        # image_boxes      = boxes[0, indices[scores_sort], :]
-        # image_scores     = scores[scores_sort]
-        # image_labels     = labels[0, indices[scores_sort]]
+        image_boxes      = boxes[0, indices[scores_sort], :]
+        image_scores     = scores[scores_sort]
+        image_labels     = labels[0, indices[scores_sort]]
 
         ret_img = raw_image.copy()
 
-        # draw_detections(
-        #     ret_img,
-        #     image_boxes,
-        #     image_scores,
-        #     image_labels,
-        #     label_to_name=label_to_name)
+        draw_detections(
+            ret_img,
+            image_boxes,
+            image_scores,
+            image_labels,
+            label_to_name=label_to_name)
 
         return ret_img
 
