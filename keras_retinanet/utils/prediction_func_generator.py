@@ -65,7 +65,7 @@ def generate_prediction_func(
     def pred_func(raw_image):
         print("Preprocessing image... ", end="")
         image        = preprocess_image(raw_image.copy())
-        image, scale = resize_image(image, min_side=300, max_side=500)
+        image, scale = resize_image(image, min_side=200, max_side=300)
         image = np.expand_dims(image, axis=0)
         print("Done preprocessing image")
 
