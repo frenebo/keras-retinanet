@@ -34,6 +34,8 @@ with tf.Session() as sess:
     parser.add_argument("load_tf_model", help="Source tf model path")
     parser.add_argument("save_trt_model", help="Path to save trt model")
 
+    args = parser.parse_args()
+
     graph_def = load_graph_def(args.load_tf_model)
 
     output_names = [
