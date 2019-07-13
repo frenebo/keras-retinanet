@@ -38,19 +38,19 @@ def generate_prediction_func(
         score_threshold=0.05, # threshold score for showing prediction
     ):
 
-    graph_def = load_graph_def(frozen_graph_filename)
+    # graph_def = load_graph_def(frozen_graph_filename)
 
-    tf_config = tf.ConfigProto()
-    tf_config.gpu_options.allow_growth = True
-    tf_sess = tf.Session(config=tf_config)
-    tf.import_graph_def(graph_def, name='')
+    # tf_config = tf.ConfigProto()
+    # tf_config.gpu_options.allow_growth = True
+    # tf_sess = tf.Session(config=tf_config)
+    # tf.import_graph_def(graph_def, name='')
 
     preprocess_image = models.backbone(backbone_name).preprocess_image
     label_to_name = csv_label_to_name_func(csv_classes_path)
 
-    boxes_tensor = tf_sess.graph.get_tensor_by_name("ident_boxes/Identity:0")
-    scores_tensor = tf_sess.graph.get_tensor_by_name("ident_scores/Identity:0")
-    labels_tensor = tf_sess.graph.get_tensor_by_name("ident_labels/Identity:0")
+    # boxes_tensor = tf_sess.graph.get_tensor_by_name("ident_boxes/Identity:0")
+    # scores_tensor = tf_sess.graph.get_tensor_by_name("ident_scores/Identity:0")
+    # labels_tensor = tf_sess.graph.get_tensor_by_name("ident_labels/Identity:0")
 
 
 
@@ -63,20 +63,20 @@ def generate_prediction_func(
             "input_1:0": image
         }
 
-        boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
-        print("boxes: ", boxes.shape)
-        print("scores: ", scores.shape)
-        print("labels: ", labels.shape)
+        # boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
+        # print("boxes: ", boxes.shape)
+        # print("scores: ", scores.shape)
+        # print("labels: ", labels.shape)
 
-        boxes /= scale
-        indices = np.where(scores[0, :] > score_threshold)[0]
+        # boxes /= scale
+        # indices = np.where(scores[0, :] > score_threshold)[0]
 
-        scores = scores[0][indices]
-        scores_sort = np.argsort(-scores)[:max_detections]
+        # scores = scores[0][indices]
+        # scores_sort = np.argsort(-scores)[:max_detections]
 
-        image_boxes      = boxes[0, indices[scores_sort], :]
-        image_scores     = scores[scores_sort]
-        image_labels     = labels[0, indices[scores_sort]]
+        # image_boxes      = boxes[0, indices[scores_sort], :]
+        # image_scores     = scores[scores_sort]
+        # image_labels     = labels[0, indices[scores_sort]]
 
         ret_img = raw_image.copy()
 
