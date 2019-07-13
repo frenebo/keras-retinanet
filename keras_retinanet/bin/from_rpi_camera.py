@@ -1,5 +1,7 @@
 import argparse
 import cv2
+import sys
+import os
 
 # Allow relative imports when being executed as script.
 if __name__ == "__main__" and __package__ is None:
