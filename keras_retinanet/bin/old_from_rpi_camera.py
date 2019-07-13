@@ -12,7 +12,7 @@ if __name__ == "__main__" and __package__ is None:
     __package__ = "keras_retinanet.bin"
 
 from .. import models
-from .predict_video import get_video_dims, csv_label_to_name_func
+from .predict_video import csv_label_to_name_func
 from ..utils.image import resize_image
 from ..utils.visualization import draw_detections
 
