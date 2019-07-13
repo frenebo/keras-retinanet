@@ -1,8 +1,11 @@
 import tensorflow as tf
 import numpy as np
+import csv
+
 from .image import resize_image
 from .visualization import draw_detections
 from .. import models
+from ..preprocessing.csv_generator import _read_classes
 
 def csv_label_to_name_func(csv_classes_path):
 
