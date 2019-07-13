@@ -29,7 +29,7 @@ def main():
 
     new_input = keras.layers.Input(batch_shape=(1, 224, 224, 3))
 
-    new_model = keras.clone_model(model, input_tensors=new_input)
+    new_model = keras.models.clone_model(model, input_tensors=new_input)
 
     # model.layers[0] = new_input
 
