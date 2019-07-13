@@ -1,7 +1,8 @@
 import tensorflow.contrib.tensorrt as trt
-
 import tensorflow as tf
 from tensorflow.python.framework import graph_io
+
+import argparse
 
 def load_graph_def(frozen_graph_filename):
     # We load the protobuf file from the disk and parse it to retrieve the
