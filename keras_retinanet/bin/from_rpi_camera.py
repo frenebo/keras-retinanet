@@ -64,8 +64,9 @@ def show_camera():
 
             labeled_img = pred_func(img)
 
-
+            print("Showing image... ", end="")
             cv2.imshow('CSI Camera', labeled_img)
+            print("Done showing image")
 
             keyCode = cv2.waitKey(30) & 0xff
 
