@@ -4,6 +4,7 @@ import keras
 import os
 import sys
 import argparse
+import json
 # This line must be executed before loading Keras model.
 K.set_learning_phase(0)
 
@@ -22,16 +23,21 @@ def main():
     parser = argparse.ArgumentParser(description='Make model have static input shape 1,224,224,3')
     parser.add_argument("source_model", help="Source model path")
     parser.add_argument("static_model_save", help="Path to save static model")
+    parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
 
     args = parser.parse_args()
 
-    model = models.load_model(args.source_model)
+    old_model = models.load_model(args.source_model)
+    config_dict = json.loads(old_model.to_json())
+    config_dict["config"]["layers"][0]["config"]["batch_input_shape"] = [1, 224, 224, 3]
 
-    new_input = keras.layers.Input(batch_shape=(1, 224, 224, 3))
+    new_model = keras.models.model_from_json(
+        json.dumps(config_dict),
+        custom_objects=models.backbone(args.backbone).custom_objects,
+    )
 
-    new_model = keras.models.clone_model(model, input_tensors=new_input)
+    new_model.set_weights(old_model.get_weights())
 
-    # model.layers[0] = new_input
 
     new_model.save(args.static_model_save)
 
