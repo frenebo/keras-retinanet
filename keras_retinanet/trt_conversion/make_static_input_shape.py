@@ -27,7 +27,7 @@ def main():
 
     model = models.load_model(args.source_model)
 
-    new_input = keras.layers.Input(shape=(224, 224, 3))
+    new_input = keras.layers.Input(batch_shape=(1, 224, 224, 3))
 
     model.layers[0] = new_input
 
