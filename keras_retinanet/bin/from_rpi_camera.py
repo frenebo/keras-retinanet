@@ -1,6 +1,13 @@
 import argparse
 import cv2
 
+# Allow relative imports when being executed as script.
+if __name__ == "__main__" and __package__ is None:
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+    import keras_retinanet.bin  # noqa: F401
+    __package__ = "keras_retinanet.bin"
+
+from ..utils.prediction_func_generator import generate_prediction_func
 
 def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=60, flip_method=0) :
     return (
