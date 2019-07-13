@@ -83,9 +83,9 @@ def main():
     )
 
 
-    # print("Output names: ", [out.op.name for out in final_model.outputs])
+    print("Output names: ", [out.op.name for out in model.outputs])
     frozen_graph = freeze_session(K.get_session(),
-                                output_names=[out.op.name for out in final_model.outputs])
+                                output_names=[out.op.name for out in fmodel.outputs])
 
     # os.makedirs('./model', exist_ok=True)
     tf.train.write_graph(frozen_graph, ".", args.tf_model_save, as_text=False)
