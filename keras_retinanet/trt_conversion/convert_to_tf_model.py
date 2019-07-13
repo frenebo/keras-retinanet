@@ -71,6 +71,7 @@ def main():
     parser.add_argument("tf_model_save", help="Path to save tensorflow model")
     parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
 
+    args = parser.parse_args()
 
     # Linear activations layers added to have easily identifiable output tensors
     model = with_activation_layers(
