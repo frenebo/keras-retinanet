@@ -29,9 +29,11 @@ def main():
 
     new_input = keras.layers.Input(batch_shape=(1, 224, 224, 3))
 
-    model.layers[0] = new_input
+    new_model = keras.clone_model(model, input_tensors=new_input)
 
-    model.save(args.static_model_save)
+    # model.layers[0] = new_input
+
+    new_model.save(args.static_model_save)
 
 if __name__ == "__main__":
     main()
