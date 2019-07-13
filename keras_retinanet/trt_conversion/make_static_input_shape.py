@@ -38,7 +38,6 @@ def main():
 
     new_model.set_weights(old_model.get_weights())
 
-
     new_model.save(args.static_model_save)
 
 if __name__ == "__main__":
