@@ -57,6 +57,7 @@ def generate_prediction_func(
     def pred_func(raw_image):
         image        = preprocess_image(raw_image.copy())
         image, scale = resize_image(image)
+        image = np.expand_dims(image, axis=0)
 
         feed_dict = {
             "input_1:0": image
