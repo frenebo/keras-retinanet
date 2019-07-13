@@ -59,7 +59,7 @@ def generate_prediction_func(
         image, scale = resize_image(image)
 
         feed_dict = {
-            "input_1": image
+            "input_1:0": image
         }
 
         boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
