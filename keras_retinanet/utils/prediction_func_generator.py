@@ -1,4 +1,6 @@
+# Importing TensorRT makes it possible to load TRT engine operations from saved graph
 import tensorflow.contrib.tensorrt as trt
+
 import tensorflow as tf
 import numpy as np
 import csv
