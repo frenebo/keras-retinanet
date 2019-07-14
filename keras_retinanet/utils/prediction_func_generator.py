@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import csv
+import cv2
 
 from .image import resize_image
 from .visualization import draw_detections
