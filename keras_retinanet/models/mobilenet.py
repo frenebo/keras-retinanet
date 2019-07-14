@@ -98,8 +98,7 @@ def mobilenet_retinanet(num_classes, backbone='mobilenet224_1.0', inputs=None, m
     backbone = mobilenet.MobileNet(input_tensor=inputs, alpha=alpha, include_top=False, pooling=None, weights=None)
 
     # create the full model
-    layer_names = ['conv_dw_4_relu', 'conv_dw_6_relu', 'conv_dw_12_relu']
-    # layer_names = ['conv_pw_5_relu', 'conv_pw_11_relu', 'conv_pw_13_relu']
+    layer_names = ['conv_pw_5_relu', 'conv_pw_11_relu', 'conv_pw_13_relu']
     layer_outputs = [backbone.get_layer(name).output for name in layer_names]
     backbone = keras.models.Model(inputs=inputs, outputs=layer_outputs, name=backbone.name)
 
