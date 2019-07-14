@@ -66,7 +66,7 @@ def generate_prediction_func(
     def pred_func(raw_image):
         print("Preprocessing image... ", end="")
         image        = preprocess_image(raw_image.copy())
-        print("Image shape: ", image.shape)
+        print("Image shape: ", image.shape, end=" ")
         x_scale = 224 / image.shape[1]
         y_scale = 224 / image.shape[0]
 
