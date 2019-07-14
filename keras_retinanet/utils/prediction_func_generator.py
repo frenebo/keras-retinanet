@@ -73,7 +73,7 @@ def generate_prediction_func(
         image = cv2.resize(image, None, fx=x_scale, fy=y_scale)
 
         # image, scale = resize_image(image, min_side=200, max_side=300)
-        # image = np.expand_dims(image, axis=0)
+        image = np.expand_dims(image, axis=0)
         print("Done preprocessing image")
 
         feed_dict = {
