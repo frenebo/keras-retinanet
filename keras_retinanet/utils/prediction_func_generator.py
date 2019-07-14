@@ -67,8 +67,8 @@ def generate_prediction_func(
         print("Preprocessing image... ", end="")
         image        = preprocess_image(raw_image.copy())
         print("Image shape: ", image.shape)
-        x_scale = 224 / image.shape[0]
-        y_scale = 224 / image.shape[1]
+        x_scale = 224 / image.shape[1]
+        y_scale = 224 / image.shape[0]
 
         image = cv2.resize(image, None, fx=x_scale, fy=y_scale)
 
