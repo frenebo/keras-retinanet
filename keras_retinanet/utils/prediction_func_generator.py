@@ -90,10 +90,16 @@ def generate_prediction_func(
         end = datetime.datetime.now()
         milliseconds = (end - start).total_seconds()*1000
         print("Done running tf session on image, took {} milliseconds".format(milliseconds))
-        print("boxes: ", boxes.shape)
-        print("Example box: ", boxes[0][0])
-        print("scores: ", scores.shape)
-        print("labels: ", labels.shape)
+        # print("boxes: ", boxes.shape)
+        # print("Example box: ", boxes[0][0])
+        # boxe values are ordered: x1, y1, x2, y2
+        boxes[:,:,0] /= x_scale
+        boxes[:,:,2] /= x_scale
+        boxes[:,:,1] /= y_scale
+        boxes[:,:,3] /= y_scale
+
+        # print("scores: ", scores.shape)
+        # print("labels: ", labels.shape)
 
         print("Extracting predictions from session output... ", end="")
         print("Boxes shape: ", boxes.shape)
