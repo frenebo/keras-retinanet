@@ -75,11 +75,11 @@ def main():
 
     # Linear activations layers added to have easily identifiable output tensors
     model = with_activation_layers(
-        models.convert_model(
+        # models.convert_model(
             models.load_model(
                 args.source_model, backbone_name=args.backbone
             )
-        )
+        # )
     )
 
 
