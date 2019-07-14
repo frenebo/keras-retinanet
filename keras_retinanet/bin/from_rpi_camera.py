@@ -38,6 +38,7 @@ def show_camera():
     parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
     parser.add_argument("--score-threshold", default=0.05, type=float, help="Threshold for displaying a result")
     parser.add_argument("--max-detections", default=100, type=int, help="Maximum number of detections to show")
+    parser.add_argument("--output-directory", help="Store to a video file in directory instead of displaying")
     args = parser.parse_args()
 
     if args.prediction_model.endswith(".h5"):
@@ -56,22 +57,42 @@ def show_camera():
 
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 
+    if args.output_directory is not None:
+        fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+        framerate = 1.0 # arbitrary
+        output_video = cv2.VideoWriter(
+            os.path.join(args.output_directory, "output.avi"),
+            fourcc,
+            framerate,
+            get_video_dims(video_cap)
+        )
+
     if cap.isOpened():
-        window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
-        # Window
-        while cv2.getWindowProperty('CSI Camera',0) >= 0:
-            _, img = cap.read()
+        if args.output_directory is None:
+            window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
+            # Window
+            while cv2.getWindowProperty('CSI Camera',0) >= 0:
+                _, img = cap.read()
 
-            labeled_img = pred_func(img)
+                labeled_img = pred_func(img)
 
-            print("Showing image... ", end="")
-            cv2.imshow('CSI Camera', labeled_img)
-            print("Done showing image")
+                print("Showing image... ", end="")
+                cv2.imshow('CSI Camera', labeled_img)
+                print("Done showing image")
 
-            keyCode = cv2.waitKey(30) & 0xff
+                keyCode = cv2.waitKey(30) & 0xff
 
-            if keyCode == 27:
-               break
+                if keyCode == 27:
+                break
+        else:
+            try:
+                while True:
+                    _, img = cap.read()
+                    labled_img = pred_func(img)
+                    output_video.write(with_detections)
+            except KeyboardInterrupt:
+                output_video.release()
+
         cap.release()
         cv2.destroyAllWindows()
     else:
