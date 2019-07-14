@@ -5,6 +5,7 @@ import tensorflow as tf
 import numpy as np
 import csv
 import cv2
+import datetime
 
 from .image import resize_image
 from .visualization import draw_detections
@@ -84,8 +85,11 @@ def generate_prediction_func(
         }
 
         print("Running TF session on image... ", end="", flush=True)
+        start = datetime.datetime.now()
         boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
-        print("Done running tf session on image")
+        end = datetime.datetime.now()
+        milliseconds = (end - start).total_seconds()*1000
+        print("Done running tf session on image, took {} milliseconds".format(milliseconds))
         print("boxes: ", boxes.shape)
         # print("scores: ", scores.shape)
         # print("labels: ", labels.shape)
