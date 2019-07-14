@@ -12,6 +12,7 @@ if __name__ == "__main__" and __package__ is None:
     __package__ = "keras_retinanet.bin"
 
 from ..utils.prediction_func_generator import generate_prediction_func
+from .predict_video import get_video_dims, get_video_framerate, videocap_generator
 
 def main():
     parser = argparse.ArgumentParser(description='Predict video with tensorflow graph')
