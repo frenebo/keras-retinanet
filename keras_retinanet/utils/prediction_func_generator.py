@@ -97,7 +97,7 @@ def generate_prediction_func(
 
         print("Extracting predictions from session output... ", end="")
         print("Boxes shape: ", boxes.shape)
-        boxes[]
+
         # boxes /= scale
         indices = np.where(scores[0, :] > score_threshold)[0]
 
