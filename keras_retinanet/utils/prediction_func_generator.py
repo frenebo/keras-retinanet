@@ -70,7 +70,7 @@ def generate_prediction_func(
         x_scale = 224 / image.shape[0]
         y_scale = 224 / image.shape[1]
 
-        image = cv2.resize(img, None, fx=x_scale, fy=y_scale)
+        image = cv2.resize(image, None, fx=x_scale, fy=y_scale)
 
         # image, scale = resize_image(image, min_side=200, max_side=300)
         # image = np.expand_dims(image, axis=0)
