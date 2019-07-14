@@ -44,7 +44,7 @@ def generate_prediction_func(
     print("Done loading graph definition")
 
     print("Creating TF session... ", end="")
-    tf_config = tf.ConfigProto()
+    tf_config = tf.ConfigProto(log_device_placement=True)
     tf_config.gpu_options.allow_growth = True
     tf_sess = tf.Session(config=tf_config)
     print("Done creating TF session")

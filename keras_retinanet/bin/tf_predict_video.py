@@ -5,8 +5,6 @@ import progressbar
 import os
 import sys
 
-import tensorflow as tf
-
 # Allow relative imports when being executed as script.
 if __name__ == "__main__" and __package__ is None:
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -52,8 +50,6 @@ def main():
         framerate,
         get_video_dims(video_cap)
     )
-
-    tf.get_default_graph().finalize()
 
 
     with progressbar.ProgressBar(max_value=frame_count) as bar:
