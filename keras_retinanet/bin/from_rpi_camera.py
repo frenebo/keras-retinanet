@@ -83,7 +83,7 @@ def show_camera():
                 keyCode = cv2.waitKey(30) & 0xff
 
                 if keyCode == 27:
-                break
+                    break
         else:
             try:
                 while True:
