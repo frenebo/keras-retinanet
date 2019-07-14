@@ -89,7 +89,7 @@ def show_camera():
             try:
                 while True:
                     _, img = cap.read()
-                    labled_img = pred_func(img)
+                    with_detections = pred_func(img)
                     output_video.write(with_detections)
             except KeyboardInterrupt:
                 output_video.release()
