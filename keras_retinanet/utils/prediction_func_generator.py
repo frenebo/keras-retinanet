@@ -65,8 +65,14 @@ def generate_prediction_func(
     def pred_func(raw_image):
         print("Preprocessing image... ", end="")
         image        = preprocess_image(raw_image.copy())
-        image, scale = resize_image(image, min_side=200, max_side=300)
-        image = np.expand_dims(image, axis=0)
+        print("Image shape: ", image.shape)
+        x_scale = 224 / image.shape[0]
+        y_scale = 224 / image.shape[1]
+
+        image = cv2.resize(img, None, fx=x_scale, fy=y_scale)
+
+        # image, scale = resize_image(image, min_side=200, max_side=300)
+        # image = np.expand_dims(image, axis=0)
         print("Done preprocessing image")
 
         feed_dict = {
@@ -76,12 +82,13 @@ def generate_prediction_func(
         print("Running TF session on image... ", end="")
         boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
         print("Done running tf session on image")
-        # print("boxes: ", boxes.shape)
+        print("boxes: ", boxes.shape)
         # print("scores: ", scores.shape)
         # print("labels: ", labels.shape)
 
         print("Extracting predictions from session output... ", end="")
-        boxes /= scale
+        print("Boxes shape: ", boxes.shape)
+        # boxes /= scale
         indices = np.where(scores[0, :] > score_threshold)[0]
 
         scores = scores[0][indices]
