@@ -59,14 +59,14 @@ def freeze_session(session, keep_var_names=None, output_names=None, clear_device
         #     # print("Op:")
         #     print(op.name)
 
-        graph.get_tensor_by_name("input_1:0").set_shape([1, 224, 224, 3])
+        graph.get_tensor_by_name("input_1:0").set_shape([1, 900, 900, 3])
 
         frozen_graph = convert_variables_to_constants(session, input_graph_def,
                                                       output_names, freeze_var_names)
         return frozen_graph
 
 def main():
-    parser = argparse.ArgumentParser(description='Make model have static input shape 1,224,224,3')
+    parser = argparse.ArgumentParser(description='Make model have static input shape 1,900,900,3')
     parser.add_argument("source_model", help="Source h5 model path")
     parser.add_argument("tf_model_save", help="Path to save tensorflow model")
     parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
