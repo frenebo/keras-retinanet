@@ -61,7 +61,7 @@ def show_camera():
         fourcc = cv2.VideoWriter_fourcc(*"MJPG")
         framerate = 1.0 # arbitrary
         output_video = cv2.VideoWriter(
-            os.path.join(args.output_directory, "output.avi"),
+            os.path.join(args.output_directory, "camera_output.avi"),
             fourcc,
             framerate,
             get_video_dims(video_cap)
