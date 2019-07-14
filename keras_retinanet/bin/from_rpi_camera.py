@@ -2,6 +2,7 @@ import argparse
 import cv2
 import sys
 import os
+import tensorflow.contrib.tensorrt as trt
 
 # Allow relative imports when being executed as script.
 if __name__ == "__main__" and __package__ is None:
