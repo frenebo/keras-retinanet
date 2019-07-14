@@ -10,6 +10,7 @@ if __name__ == "__main__" and __package__ is None:
     __package__ = "keras_retinanet.bin"
 
 from ..utils.prediction_func_generator import generate_prediction_func
+from .predict_video import get_video_dims
 
 def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=60, flip_method=0) :
     return (
@@ -64,7 +65,7 @@ def show_camera():
             os.path.join(args.output_directory, "camera_output.avi"),
             fourcc,
             framerate,
-            get_video_dims(video_cap)
+            get_video_dims(cap)
         )
 
     if cap.isOpened():
