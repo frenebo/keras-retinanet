@@ -91,11 +91,13 @@ def generate_prediction_func(
         milliseconds = (end - start).total_seconds()*1000
         print("Done running tf session on image, took {} milliseconds".format(milliseconds))
         print("boxes: ", boxes.shape)
-        # print("scores: ", scores.shape)
-        # print("labels: ", labels.shape)
+        print("Example box: ", boxes[0][0])
+        print("scores: ", scores.shape)
+        print("labels: ", labels.shape)
 
         print("Extracting predictions from session output... ", end="")
         print("Boxes shape: ", boxes.shape)
+        boxes[]
         # boxes /= scale
         indices = np.where(scores[0, :] > score_threshold)[0]
 
