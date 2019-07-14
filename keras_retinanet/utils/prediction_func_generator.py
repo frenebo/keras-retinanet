@@ -80,7 +80,7 @@ def generate_prediction_func(
             "input_1:0": image
         }
 
-        print("Running TF session on image... ", end="")
+        print("Running TF session on image... ", end="", flush=True)
         boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
         print("Done running tf session on image")
         print("boxes: ", boxes.shape)
