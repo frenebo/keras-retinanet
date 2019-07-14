@@ -59,15 +59,11 @@ def generate_prediction_func(
     preprocess_image = models.backbone(backbone_name).preprocess_image
     label_to_name = csv_label_to_name_func(csv_classes_path)
 
-    print("Getting graph tensors... ", end="")
-    input_tensor = tf_sess.graph.get_tensor_by_name("input_1:0")
+    print("Getting graph output tensors... ", end="")
     boxes_tensor = tf_sess.graph.get_tensor_by_name("ident_boxes/Identity:0")
     scores_tensor = tf_sess.graph.get_tensor_by_name("ident_scores/Identity:0")
     labels_tensor = tf_sess.graph.get_tensor_by_name("ident_labels/Identity:0")
-    print("Done getting graph tensors")
-
-    model = keras.models.Model(inputs=input_tensor, outputs=[boxes_tensor, scores_tensor, labels_tensor])
-    bbox_model = models.convert_model(model)
+    print("Done getting graph output tensors")
 
 
     def pred_func(raw_image):
@@ -83,18 +79,16 @@ def generate_prediction_func(
         image = np.expand_dims(image, axis=0)
         print("Done preprocessing image")
 
-        # feed_dict = {
-        #     "input_1:0": image
-        # }
+        feed_dict = {
+            "input_1:0": image
+        }
 
-        print("Running model on image... ", end="", flush=True)
-
-        # boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
-        boxes, scores, labels = bbox_model.predict_on_batch(image)
-        print("Done running model on image")
+        print("Running TF session on image... ", end="", flush=True)
+        boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
+        print("Done running tf session on image")
         print("boxes: ", boxes.shape)
-        print("scores: ", scores.shape)
-        print("labels: ", labels.shape)
+        # print("scores: ", scores.shape)
+        # print("labels: ", labels.shape)
 
         print("Extracting predictions from session output... ", end="")
         print("Boxes shape: ", boxes.shape)
