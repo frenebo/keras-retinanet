@@ -44,16 +44,16 @@ The default anchor parameters.
 """
 AnchorParameters.default = AnchorParameters(
     sizes   = [
-        # 32,  # P3
+        32,  # P3
         64,  # P4
-        128, # P5
+        # 128, # P5
         # 256, # P6
         # 512, # P7
     ],
     strides = [
-        # 8,   # P3
+        8,   # P3
         16,  # P4
-        32,  # P5
+        # 32,  # P5
         # 64,  # P6
         # 128, # P7
     ],
@@ -237,7 +237,7 @@ def anchors_for_shape(
     """
 
     if pyramid_levels is None:
-        pyramid_levels = [4, 5] # [3, 4, 5, 6, 7]
+        pyramid_levels = [3, 4] # [3, 4, 5, 6, 7]
 
     if anchor_params is None:
         anchor_params = AnchorParameters.default
