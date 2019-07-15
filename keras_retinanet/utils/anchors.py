@@ -237,7 +237,7 @@ def anchors_for_shape(
     """
 
     if pyramid_levels is None:
-        pyramid_levels = [3] # [3, 4, 5, 6, 7]
+        pyramid_levels = [3, 4] # [3, 4, 5, 6, 7]
 
     if anchor_params is None:
         anchor_params = AnchorParameters.default
