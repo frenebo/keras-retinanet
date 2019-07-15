@@ -5,6 +5,7 @@ import os
 import sys
 import argparse
 import json
+import gc
 # This line must be executed before loading Keras model. ??? Myabe not
 K.set_learning_phase(0)
 
