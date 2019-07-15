@@ -232,10 +232,7 @@ def __build_anchors(anchor_parameters, features):
         )(f) for i, f in enumerate(features)
     ]
 
-    if len(anchors) == 1:
-        return anchors[0]
-    else:
-        return keras.layers.Concatenate(axis=1, name='anchors')(anchors)
+    return keras.layers.Concatenate(axis=1, name='anchors')(anchors)
 
 
 def retinanet(

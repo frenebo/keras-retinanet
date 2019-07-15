@@ -45,14 +45,14 @@ The default anchor parameters.
 AnchorParameters.default = AnchorParameters(
     sizes   = [
         32,  # P3
-        # 64,  # P4
+        64,  # P4
         # 128, # P5
         # 256, # P6
         # 512, # P7
     ],
     strides = [
         8,   # P3
-        # 16,  # P4
+        16,  # P4
         # 32,  # P5
         # 64,  # P6
         # 128, # P7
