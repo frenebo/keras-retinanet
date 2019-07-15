@@ -46,13 +46,15 @@ def main():
     print("Done clearing session")
 
     print("Setting config dict values... ", end="")
-    config_dict["config"]["layers"][0]["name"] = "input_1"
     config_dict["config"]["layers"][0]["config"]["batch_input_shape"] = [1, 200, 200, 3]
+    config_str = json.dumps(config_dict)
+    # Replace original input name with input_1
+    config_str.replace(config_dict["config"]["layers"][0]["name"], "input_1")
     print("Done setting config dict values.")
 
     print("Creating new model from json... ", end="")
     new_model = keras.models.model_from_json(
-        json.dumps(config_dict),
+        config_str,
         custom_objects=models.backbone(args.backbone).custom_objects,
     )
     print("Done creating new model.")
