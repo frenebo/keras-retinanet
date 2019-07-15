@@ -48,7 +48,7 @@ def main():
     print("Setting config dict values... ", end="")
     config_dict["config"]["layers"][0]["name"] = "input_1"
     config_dict["config"]["layers"][0]["config"]["batch_input_shape"] = [1, 200, 200, 3]
-    pint("Done setting config dict values.")
+    print("Done setting config dict values.")
 
     print("Creating new model from json... ", end="")
     new_model = keras.models.model_from_json(
