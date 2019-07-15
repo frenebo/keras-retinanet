@@ -20,7 +20,7 @@ if __name__ == "__main__" and __package__ is None:
 from .. import models
 
 def main():
-    parser = argparse.ArgumentParser(description='Make model have static input shape 1,900,900,3')
+    parser = argparse.ArgumentParser(description='Make model have static input shape 1,200,200,3')
     parser.add_argument("source_model", help="Source model path")
     parser.add_argument("static_model_save", help="Path to save static model")
     parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
@@ -29,7 +29,7 @@ def main():
 
     old_model = models.load_model(args.source_model)
     config_dict = json.loads(old_model.to_json())
-    config_dict["config"]["layers"][0]["config"]["batch_input_shape"] = [1, 900, 900, 3]
+    config_dict["config"]["layers"][0]["config"]["batch_input_shape"] = [1, 200, 200, 3]
 
     new_model = keras.models.model_from_json(
         json.dumps(config_dict),
