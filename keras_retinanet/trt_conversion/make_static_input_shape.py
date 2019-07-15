@@ -49,7 +49,7 @@ def main():
     config_dict["config"]["layers"][0]["config"]["batch_input_shape"] = [1, 200, 200, 3]
     config_str = json.dumps(config_dict)
     # Replace original input name with input_1 @TODO is this safe?
-    config_str.replace(config_dict["config"]["layers"][0]["name"], "input_1")
+    config_str = config_str.replace(config_dict["config"]["layers"][0]["name"], "input_1")
     print("Done setting config dict values.")
 
     print("Creating new model from json... ", end="")
