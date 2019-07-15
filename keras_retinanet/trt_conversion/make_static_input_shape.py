@@ -5,7 +5,7 @@ import os
 import sys
 import argparse
 import json
-# This line must be executed before loading Keras model.
+# This line must be executed before loading Keras model. ??? Myabe not
 K.set_learning_phase(0)
 
 import tensorflow as tf
@@ -27,19 +27,39 @@ def main():
 
     args = parser.parse_args()
 
+    print("Loading model... ", end="")
     old_model = models.load_model(args.source_model)
+    print("Model loaded.")
+    print("Getting json config... ", end="")
     config_dict = json.loads(old_model.to_json())
+    print("Done getting json config.")
+
+    print("Getting model weights... ", end="")
+    old_weights = old_model.get_weights()
+    print("Done getting model weights.")
+
+    print("Clearing session... ", end="")
+    del old_model
+    K.clear_session()
+    print("Done clearing session")
+
     config_dict["config"]["layers"][0]["name"] = "input_1"
     config_dict["config"]["layers"][0]["config"]["batch_input_shape"] = [1, 200, 200, 3]
 
+    print("Creating new model from json... ", end="")
     new_model = keras.models.model_from_json(
         json.dumps(config_dict),
         custom_objects=models.backbone(args.backbone).custom_objects,
     )
+    print("Done creating new model.")
 
-    new_model.set_weights(old_model.get_weights())
+    print("Setting weights from old weights... ", end="")
+    new_model.set_weights(old_weights)
+    print("Done setting weights.")
 
+    print("Saving new model as {}... ".format(args.static_model_save), end="")
     new_model.save(args.static_model_save)
+    print("Done saving new model")
 
 if __name__ == "__main__":
     main()
