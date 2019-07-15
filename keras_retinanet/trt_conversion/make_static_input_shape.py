@@ -5,6 +5,7 @@ import os
 import sys
 import argparse
 import json
+import gc
 # This line must be executed before loading Keras model. ??? Myabe not
 K.set_learning_phase(0)
 
@@ -41,10 +42,13 @@ def main():
     print("Clearing session... ", end="")
     del old_model
     K.clear_session()
+    gc.collect()
     print("Done clearing session")
 
+    print("Setting config dict values... ", end="")
     config_dict["config"]["layers"][0]["name"] = "input_1"
     config_dict["config"]["layers"][0]["config"]["batch_input_shape"] = [1, 200, 200, 3]
+    pint("Done setting config dict values.")
 
     print("Creating new model from json... ", end="")
     new_model = keras.models.model_from_json(
