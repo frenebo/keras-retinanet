@@ -1,4 +1,6 @@
 import importlib
+import tensorflow as tf
+from keras.backend.tensorflow_backend import set_session
 from keras import backend as K
 import keras
 import os
@@ -7,7 +9,7 @@ import argparse
 import json
 import gc
 # This line must be executed before loading Keras model. ??? Myabe not
-K.set_learning_phase(0)
+# K.set_learning_phase(0)
 
 import tensorflow as tf
 
@@ -21,6 +23,13 @@ if __name__ == "__main__" and __package__ is None:
 from .. import models
 
 def main():
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+    # config.log_device_placement = True  # to log device placement (on which device the operation ran)
+                                        # (nothing gets printed in Jupyter, only if you run it standalone)
+    sess = tf.Session(config=config)
+    set_session(sess)  # set this TensorFlow session as the default session for Keras
+
     parser = argparse.ArgumentParser(description='Make model have static input shape 1,200,200,3')
     parser.add_argument("source_model", help="Source model path")
     parser.add_argument("static_model_save", help="Path to save static model")
