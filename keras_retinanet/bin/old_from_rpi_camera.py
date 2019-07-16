@@ -85,13 +85,13 @@ def show_camera():
         raise Exception("Could not open capture")
 
     THREAD_RUNNING = True
+
+    IMG_HANDLE = None
+    prev_img = None
+
     th = threading.Thread(target=grab_img, args=(cap,))
     th.start()
 
-    if "IMG_HANDLE" in globals():
-        prev_img = IMG_HANDLE.copy()
-    else:
-        prev_img = None
 
     while True:
         if "IMG_HANDLE" in globals():
