@@ -77,6 +77,7 @@ def show_camera():
         csv_classes_path=args.csv_classes,
         max_detections=args.max_detections,
         score_threshold=args.score_threshold, # threshold score for showing prediction
+        keep_downsized=True,
     )
 
     # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
@@ -85,7 +86,7 @@ def show_camera():
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 
 
-    if !cap.isOpened():
+    if not cap.isOpened():
         raise Exception("Unable to open camera")
 
     try:
