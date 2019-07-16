@@ -4,6 +4,7 @@ import sys
 import os
 import threading
 import time
+import numpy as np
 
 # Allow relative imports when being executed as script.
 if __name__ == "__main__" and __package__ is None:
@@ -96,7 +97,7 @@ def show_camera():
 
     while True:
         if "IMG_HANDLE" in globals():
-            if IMG_HANDLE == prev_img:
+            if np.array_equal(IMG_HANDLE, prev_img):
                 pass
             else:
                 prev_img = IMG_HANDLE
