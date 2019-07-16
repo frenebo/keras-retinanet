@@ -66,7 +66,6 @@ def show_camera():
     parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
     parser.add_argument("--score-threshold", default=0.05, type=float, help="Threshold for displaying a result")
     parser.add_argument("--max-detections", default=100, type=int, help="Maximum number of detections to show")
-    parser.add_argument("--output-directory", help="Store to a video file in directory instead of displaying")
     args = parser.parse_args()
 
     if args.prediction_model.endswith(".h5"):
@@ -85,20 +84,17 @@ def show_camera():
 
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 
-    if args.output_directory is not None:
-        fourcc = cv2.VideoWriter_fourcc(*"MJPG")
-        framerate = 1.0 # arbitrary
-        output_video = cv2.VideoWriter(
-            os.path.join(args.output_directory, "camera_output.avi"),
-            fourcc,
-            framerate,
-            get_video_dims(cap)
-        )
 
     if !cap.isOpened():
         raise Exception("Unable to open camera")
 
-    VisualizeWindow(pred_func, cap)
+    try:
+        VisualizeWindow(pred_func, cap)
+    except:
+        cap.release()
+        raise
+    cap.release()
+    # cv2.destroyAllWindows()
 
     # if cap.isOpened():
     #     if args.output_directory is None:
