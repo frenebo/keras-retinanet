@@ -2,6 +2,7 @@ import argparse
 import cv2
 from PIL import Image
 import tkinter as tk
+from PIL import ImageTk
 import sys
 import os
 
@@ -13,6 +14,37 @@ if __name__ == "__main__" and __package__ is None:
 
 from ..utils.prediction_func_generator import generate_prediction_func
 from .predict_video import get_video_dims
+
+class ImageCanvasWrapper:
+    def __init__(self, parent, pack_side=tk.TOP):
+        image_frame = tk.Frame(parent)
+        image_frame.pack(side=pack_side)
+
+        self.image_label = tk.Label(image_frame)
+        self.image_label.pack(side=tk.TOP)
+
+        self.image_canvas = tk.Canvas(image_frame, width=100, height=100)
+        self.image_canvas.pack(expand=tk.YES, side=tk.TOP)
+
+    def set_label(self, label):
+        self.image_label.configure(text=label)
+
+    def set_image(self, pil_img):
+        width, height = pil_img.size
+        self.image_canvas.width = width
+        self.image_canvas.height = height
+        self.image_canvas.config(width=width, height=height)
+
+        tk_img = ImageTk.PhotoImage(pil_img)
+
+        self._prevent_image_garbage_collection = tk_img
+
+        # pic's upper left corner (NW) on the canvas is at x=50 y=10
+        self.image_canvas.create_image(0, 0, image=tk_img, anchor=tk.NW)
+
+    def set_blank(self):
+        self.image_canvas.delete("all")
+        self._prevent_image_garbage_collection = None
 
 class VisualizeWindow:
     def __init__(self, pred_func, cap):
