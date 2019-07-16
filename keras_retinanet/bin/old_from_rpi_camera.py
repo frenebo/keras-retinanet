@@ -2,6 +2,7 @@ import argparse
 import cv2
 import sys
 import os
+import threading
 
 # Allow relative imports when being executed as script.
 if __name__ == "__main__" and __package__ is None:
@@ -12,12 +13,23 @@ if __name__ == "__main__" and __package__ is None:
 from ..utils.prediction_func_generator import generate_prediction_func
 from .predict_video import get_video_dims
 
+#
+# This 'grab_img' function is designed to be run in the sub-thread.
+# Once started, this thread continues to grab new image and put it
+# into the global IMG_HANDLE, until THREAD_RUNNING is set to False.
+#
+def grab_img(cap):
+    global THREAD_RUNNING
+    global IMG_HANDLE
+    while THREAD_RUNNING:
+        _, IMG_HANDLE = cap.read()
+
 def gstreamer_pipeline(
     capture_width=1280,
     capture_height=720,
     display_width=1280,
     display_height=720,
-    framerate=10,
+    framerate=1,
     flip_method=0) :
     return (
         'nvarguscamerasrc ! '
@@ -65,46 +77,73 @@ def show_camera():
 
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 
-    if args.output_directory is not None:
-        fourcc = cv2.VideoWriter_fourcc(*"MJPG")
-        framerate = 1.0 # arbitrary
-        output_video = cv2.VideoWriter(
-            os.path.join(args.output_directory, "camera_output.avi"),
-            fourcc,
-            framerate,
-            get_video_dims(cap)
-        )
+    if not cap.isOpened():
+        raise Exception("Could not open capture")
 
-    if cap.isOpened():
-        if args.output_directory is None:
-            window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
-            # Window
-            while cv2.getWindowProperty('CSI Camera',0) >= 0:
-                _, img = cap.read()
+    THREAD_RUNNING = True
+    th = threading.Thread(target=grab_img, args=(cap,))
+    th.start()
 
-                labeled_img = pred_func(img)
-
-                print("Showing image... ", end="")
-                cv2.imshow('CSI Camera', labeled_img)
-                print("Done showing image")
-
-                keyCode = cv2.waitKey(30) & 0xff
-
-                if keyCode == 27:
-                    break
-        else:
-            try:
-                while True:
-                    _, img = cap.read()
-                    with_detections = pred_func(img)
-                    output_video.write(with_detections)
-            except KeyboardInterrupt:
-                output_video.release()
-
-        cap.release()
-        cv2.destroyAllWindows()
+    if "IMG_HANDLE" in globals():
+        prev_img = IMG_HANDLE.copy()
     else:
-        print('Unable to open camera')
+        prev_img = None
+
+    while True:
+        if "IMG_HANDLE" in globals():
+            if IMG_HANDLE == prev_img:
+                pass
+            else:
+                prev_img = IMG_HANDLE
+            labeled_img = pred_func(IMG_HANDLE)
+            cv2.imshow("CSI Camera", labeled_img)
+        else:
+            pass
+        time.sleep(0.0001)
+
+    THREAD_RUNNING = False
+    th.join()
+
+    # if args.output_directory is not None:
+    #     fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+    #     framerate = 1.0 # arbitrary
+    #     output_video = cv2.VideoWriter(
+    #         os.path.join(args.output_directory, "camera_output.avi"),
+    #         fourcc,
+    #         framerate,
+    #         get_video_dims(cap)
+    #     )
+
+    # if cap.isOpened():
+    #     if args.output_directory is None:
+    #         window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
+    #         # Window
+    #         while cv2.getWindowProperty('CSI Camera',0) >= 0:
+    #             _, img = cap.read()
+
+    #             labeled_img = pred_func(img)
+
+    #             print("Showing image... ", end="")
+    #             cv2.imshow('CSI Camera', labeled_img)
+    #             print("Done showing image")
+
+    #             keyCode = cv2.waitKey(30) & 0xff
+
+    #             if keyCode == 27:
+    #                 break
+    #     else:
+    #         try:
+    #             while True:
+    #                 _, img = cap.read()
+    #                 with_detections = pred_func(img)
+    #                 output_video.write(with_detections)
+    #         except KeyboardInterrupt:
+    #             output_video.release()
+
+    #     cap.release()
+    #     cv2.destroyAllWindows()
+    # else:
+    #     print('Unable to open camera')
 
 
 if __name__ == '__main__':
