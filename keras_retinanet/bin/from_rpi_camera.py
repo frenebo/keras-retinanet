@@ -1,5 +1,7 @@
 import argparse
 import cv2
+from PIL import Image
+import tkinter as tk
 import sys
 import os
 
@@ -11,6 +13,31 @@ if __name__ == "__main__" and __package__ is None:
 
 from ..utils.prediction_func_generator import generate_prediction_func
 from .predict_video import get_video_dims
+
+class VisualizeWindow:
+    def __init__(self, pred_func, cap):
+        self.pred_func = pred_func
+        self.cap = cap
+
+        self.root = tk.Tk()
+        self.root.configure(background='grey')
+        self.img_canvas = ImageCanvasWrapper(self.root)
+
+        while True:
+            self.update_things()
+
+    def update_prediction(self):
+        _, img = self.cap.read()
+        labeled_img = self.pred_func(img)
+
+        labeled_pil_image = Image.fromarray(labeled_img)
+        self.img_canvas.set_image(labeled_pil_image)
+
+    def update_things(self):
+        self.update_prediction()
+        self.root.update_idletasks()
+        self.root.update()
+
 
 def gstreamer_pipeline (capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=60, flip_method=0) :
     return (
@@ -68,36 +95,41 @@ def show_camera():
             get_video_dims(cap)
         )
 
-    if cap.isOpened():
-        if args.output_directory is None:
-            window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
-            # Window
-            while cv2.getWindowProperty('CSI Camera',0) >= 0:
-                _, img = cap.read()
+    if !cap.isOpened():
+        raise Exception("Unable to open camera")
 
-                labeled_img = pred_func(img)
+    VisualizeWindow(pred_func, cap)
 
-                print("Showing image... ", end="")
-                cv2.imshow('CSI Camera', labeled_img)
-                print("Done showing image")
+    # if cap.isOpened():
+    #     if args.output_directory is None:
+    #         window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
+    #         # Window
+    #         while cv2.getWindowProperty('CSI Camera',0) >= 0:
+    #             _, img = cap.read()
 
-                keyCode = cv2.waitKey(30) & 0xff
+    #             labeled_img = pred_func(img)
 
-                if keyCode == 27:
-                    break
-        else:
-            try:
-                while True:
-                    _, img = cap.read()
-                    with_detections = pred_func(img)
-                    output_video.write(with_detections)
-            except KeyboardInterrupt:
-                output_video.release()
+    #             print("Showing image... ", end="")
+    #             cv2.imshow('CSI Camera', labeled_img)
+    #             print("Done showing image")
 
-        cap.release()
-        cv2.destroyAllWindows()
-    else:
-        print('Unable to open camera')
+    #             keyCode = cv2.waitKey(30) & 0xff
+
+    #             if keyCode == 27:
+    #                 break
+    #     else:
+    #         try:
+    #             while True:
+    #                 _, img = cap.read()
+    #                 with_detections = pred_func(img)
+    #                 output_video.write(with_detections)
+    #         except KeyboardInterrupt:
+    #             output_video.release()
+
+    #     cap.release()
+    #     cv2.destroyAllWindows()
+    # else:
+    #     print('Unable to open camera')
 
 
 if __name__ == '__main__':
