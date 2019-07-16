@@ -42,6 +42,7 @@ def generate_prediction_func(
         max_detections=100,
         score_threshold=0.05, # threshold score for showing prediction
         keep_downsized=False,
+        limit_threads=None, # Either none or a number of threads
     ):
 
     print("Loading graph definition... ", end="")
@@ -49,7 +50,17 @@ def generate_prediction_func(
     print("Done loading graph definition")
 
     print("Creating TF session... ", end="")
-    tf_config = tf.ConfigProto(log_device_placement=True)
+    if limit_threads is None:
+        thread_args = {}
+    else:
+        thread_args = {
+            "intra_op_parallelism_threads": limit_threads,
+            "inter_op_parallelism_threads": limit_threads,
+        }
+    tf_config = tf.ConfigProto(
+        log_device_placement=True,
+        **thread_args,
+    )
     tf_config.gpu_options.allow_growth = True
     tf_sess = tf.Session(config=tf_config)
     print("Done creating TF session")
