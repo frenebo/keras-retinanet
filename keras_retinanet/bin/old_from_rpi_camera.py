@@ -24,6 +24,7 @@ def grab_img(cap):
     global IMG_HANDLE
     while THREAD_RUNNING:
         _, IMG_HANDLE = cap.read()
+        time.sleep(0.001)
 
 def gstreamer_pipeline(
     capture_width=1280,
@@ -99,8 +100,8 @@ def show_camera():
                 pass
             else:
                 prev_img = IMG_HANDLE
-            labeled_img = pred_func(IMG_HANDLE)
-            cv2.imshow("CSI Camera", labeled_img)
+                labeled_img = pred_func(IMG_HANDLE)
+                cv2.imshow("CSI Camera", labeled_img)
         else:
             pass
         time.sleep(0.0001)
