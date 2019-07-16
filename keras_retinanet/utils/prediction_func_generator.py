@@ -41,6 +41,7 @@ def generate_prediction_func(
         csv_classes_path,
         max_detections=100,
         score_threshold=0.05, # threshold score for showing prediction
+        keep_downsized=False,
     ):
 
     print("Loading graph definition... ", end="")
@@ -77,11 +78,11 @@ def generate_prediction_func(
         image = cv2.resize(image, None, fx=x_scale, fy=y_scale)
 
         # image, scale = resize_image(image, min_side=200, max_side=300)
-        image = np.expand_dims(image, axis=0)
+
         print("Done preprocessing image")
 
         feed_dict = {
-            "input_1:0": image
+            "input_1:0": np.expand_dims(image, axis=0)
         }
 
         print("Running TF session on image... ", end="", flush=True)
@@ -93,10 +94,12 @@ def generate_prediction_func(
         # print("boxes: ", boxes.shape)
         # print("Example box: ", boxes[0][0])
         # boxe values are ordered: x1, y1, x2, y2
-        boxes[:,:,0] /= x_scale
-        boxes[:,:,2] /= x_scale
-        boxes[:,:,1] /= y_scale
-        boxes[:,:,3] /= y_scale
+
+        if not keep_downsized:
+            boxes[:,:,0] /= x_scale
+            boxes[:,:,2] /= x_scale
+            boxes[:,:,1] /= y_scale
+            boxes[:,:,3] /= y_scale
 
         # print("scores: ", scores.shape)
         # print("labels: ", labels.shape)
@@ -116,7 +119,11 @@ def generate_prediction_func(
         print("Done extracting predictions")
 
         print("Drawing detections... ", end="")
-        ret_img = raw_image.copy()
+        if keep_downsized:
+            ret_img = image.copy()
+        else:
+            ret_img = raw_image.copy()
+
         draw_detections(
             ret_img,
             image_boxes,
