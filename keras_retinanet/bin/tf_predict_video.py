@@ -72,7 +72,7 @@ def main():
             if args.show_frames:
                 print("Showing frame")
                 cv2.imshow("CSI Camera", with_detections)
-                cv2.waitKey() # Necessary for some reason to show image
+                cv2.waitKey(30) # Necessary for some reason to show image
 
     if args.show_frames:
         cv2.destroyAllWindows()
