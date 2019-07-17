@@ -24,7 +24,7 @@ def main():
     parser.add_argument("--score-threshold", default=0.05, type=float, help="Threshold for displaying a result")
     parser.add_argument("--max-detections", default=100, type=int, help="Maximum number of detections to show")
     parser.add_argument("--cpu", type=int, help="Optionally limit to a cpu. Example --cpu 1,2")
-    parser.add_argument("--show-frames", type=bool, action="store_true")
+    parser.add_argument("--show-frames", action="store_true")
 
     args = parser.parse_args()
 
