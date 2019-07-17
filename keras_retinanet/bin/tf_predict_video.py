@@ -68,7 +68,9 @@ def main():
 
             output_video.write(with_detections)
             if args.show_frames:
+                print("Showing frame")
                 cv2.imshow("CSI Camera", with_detections)
+                cv2.waitKey()
 
     if args.show_frames:
         cv2.destroyAllWindows()
