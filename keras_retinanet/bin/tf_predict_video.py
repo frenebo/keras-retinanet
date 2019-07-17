@@ -31,7 +31,7 @@ def main():
         raise TypeError("Model should be a .pb file")
 
     if args.cpu is not None:
-        ret = os.system("taskset -p -c 0,1 %d" % os.getpid())
+        ret = os.system("taskset -p -c {} {}".format(args.cpu, os.getpid()))
         if ret != 0:
             raise Exception("Taskset error")
 
