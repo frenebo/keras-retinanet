@@ -23,7 +23,8 @@ def main():
     parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
     parser.add_argument("--score-threshold", default=0.05, type=float, help="Threshold for displaying a result")
     parser.add_argument("--max-detections", default=100, type=int, help="Maximum number of detections to show")
-    parser.add_argument("--cpu", type=int, help="Optionally limit to a cpu")
+    parser.add_argument("--cpu", type=int, help="Optionally limit to a cpu. Example --cpu 1,2")
+    parser.add_argument("--show-frames", type=bool, action="store_true")
 
     args = parser.parse_args()
 
@@ -56,6 +57,9 @@ def main():
         get_video_dims(video_cap)
     )
 
+    if args.show_frames:
+        import cv2
+        window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
 
     with progressbar.ProgressBar(max_value=frame_count) as bar:
         for i, raw_image in enumerate(videocap_generator(video_cap)):
@@ -64,6 +68,11 @@ def main():
             with_detections = pred_func(raw_image)
 
             output_video.write(with_detections)
+            if args.show_frames:
+                cv2.imshow("CSI Camera", with_detections)
+
+    if args.show_frames:
+        cv2.destroyAllWindows()
 
     video_cap.release()
     output_video.release()
