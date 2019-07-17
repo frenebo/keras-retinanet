@@ -23,12 +23,17 @@ def main():
     parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
     parser.add_argument("--score-threshold", default=0.05, type=float, help="Threshold for displaying a result")
     parser.add_argument("--max-detections", default=100, type=int, help="Maximum number of detections to show")
+    parser.add_argument("--cpu", type=int, help="Optionally limit to a cpu")
 
     args = parser.parse_args()
 
     if args.prediction_model.endswith(".h5"):
         raise TypeError("Model should be a .pb file")
 
+    if args.cpu is not None:
+        ret = os.system("taskset -p -c 0,1 %d" % os.getpid())
+        if ret != 0:
+            raise Exception("Taskset error")
 
     pred_func = generate_prediction_func(
         frozen_graph_filename=args.prediction_model,
