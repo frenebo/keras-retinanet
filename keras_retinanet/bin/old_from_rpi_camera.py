@@ -75,7 +75,7 @@ def show_camera():
         csv_classes_path=args.csv_classes,
         max_detections=args.max_detections,
         score_threshold=args.score_threshold, # threshold score for showing prediction
-        limit_threads=2,
+        limit_threads=1,
     )
 
     # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
