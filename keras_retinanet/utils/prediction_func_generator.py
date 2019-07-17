@@ -11,6 +11,7 @@ from .image import resize_image
 from .visualization import draw_detections
 from .. import models
 from ..preprocessing.csv_generator import _read_classes
+from ..utils import SCALED_SIZE
 
 def csv_label_to_name_func(csv_classes_path):
 
@@ -83,8 +84,8 @@ def generate_prediction_func(
         print("Preprocessing image... ", end="")
         image        = preprocess_image(raw_image.copy())
         print("Image shape: ", image.shape, end=" ")
-        x_scale = 200 / image.shape[1]
-        y_scale = 200 / image.shape[0]
+        x_scale = SCALED_SIZE / image.shape[1]
+        y_scale = SCALED_SIZE / image.shape[0]
 
         image = cv2.resize(image, None, fx=x_scale, fy=y_scale)
 

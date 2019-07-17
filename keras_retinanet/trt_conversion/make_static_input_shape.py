@@ -19,6 +19,7 @@ if __name__ == "__main__" and __package__ is None:
     __package__ = "keras_retinanet.trt_conversion"
 
 from .. import models
+from ..utils import SCALED_SIZE
 
 def main():
     parser = argparse.ArgumentParser(description='Make model have static input shape 1,200,200,3')
@@ -46,7 +47,7 @@ def main():
     print("Done clearing session")
 
     print("Setting config dict values... ", end="")
-    config_dict["config"]["layers"][0]["config"]["batch_input_shape"] = [1, 200, 200, 3]
+    config_dict["config"]["layers"][0]["config"]["batch_input_shape"] = [1, SCALED_SIZE, SCALED_SIZE, 3]
     config_str = json.dumps(config_dict)
     # Replace original input name with input_1 @TODO is this safe?
     config_str = config_str.replace(config_dict["config"]["layers"][0]["name"], "input_1")
