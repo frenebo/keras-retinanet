@@ -58,7 +58,6 @@ def main():
     )
 
     if args.show_frames:
-        import cv2
         window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
 
     with progressbar.ProgressBar(max_value=frame_count) as bar:
