@@ -42,6 +42,7 @@ def main():
         csv_classes_path=args.csv_classes,
         max_detections=args.max_detections,
         score_threshold=args.score_threshold, # threshold score for showing prediction
+        keep_downsized=True,
     )
 
     video_cap = cv2.VideoCapture(args.source_video)
@@ -54,7 +55,7 @@ def main():
         os.path.join(args.output_directory, "output.avi"),
         fourcc,
         framerate,
-        get_video_dims(video_cap)
+        (200, 200)
     )
 
     if args.show_frames:
@@ -70,7 +71,7 @@ def main():
             if args.show_frames:
                 print("Showing frame")
                 cv2.imshow("CSI Camera", with_detections)
-                cv2.waitKey()
+                cv2.waitKey() # Necessary for some reason to show image
 
     if args.show_frames:
         cv2.destroyAllWindows()
