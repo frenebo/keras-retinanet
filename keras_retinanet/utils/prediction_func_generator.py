@@ -87,7 +87,7 @@ def generate_prediction_func(
         x_scale = SCALED_SIZE / image.shape[1]
         y_scale = SCALED_SIZE / image.shape[0]
 
-        image = cv2.resize(image, None, fx=x_scale, fy=y_scale, interpolation=cv2.INTER_CUBIC)
+        image = cv2.resize(image, None, fx=x_scale, fy=y_scale)
 
         # image, scale = resize_image(image, min_side=200, max_side=300)
 
