@@ -67,7 +67,7 @@ def show_camera():
     args = parser.parse_args()
 
     pred_func = generate_prediction_func(
-        frozen_graph_filename=args.prediction_model,
+        model_path=args.prediction_model,
         backbone_name=args.backbone,
         csv_classes_path=args.csv_classes,
         max_detections=args.max_detections,
