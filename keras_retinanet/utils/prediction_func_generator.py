@@ -70,8 +70,8 @@ def generate_prediction_func(
     # tf.import_graph_def(graph_def, name='')
     # print("Done importing graph_definition ", end="")
 
-    # preprocess_image = models.backbone(backbone_name).preprocess_image
-    # label_to_name = csv_label_to_name_func(csv_classes_path)
+    preprocess_image = models.backbone(backbone_name).preprocess_image
+    label_to_name = csv_label_to_name_func(csv_classes_path)
 
     # print("Getting graph output tensors... ", end="")
     # boxes_tensor = tf_sess.graph.get_tensor_by_name("ident_boxes/Identity:0")
@@ -79,7 +79,7 @@ def generate_prediction_func(
     # labels_tensor = tf_sess.graph.get_tensor_by_name("ident_labels/Identity:0")
     # print("Done getting graph output tensors")
 
-    model = models.load_model(model_path)
+    model = models.load_model(model_path, backbone_name=backbone_name)
 
 
     def pred_func(raw_image):
