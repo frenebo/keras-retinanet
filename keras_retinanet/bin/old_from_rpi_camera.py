@@ -100,6 +100,11 @@ def show_camera():
                 prev_img = IMG_HANDLE
                 labeled_img = pred_func(IMG_HANDLE)
                 cv2.imshow("CSI Camera", labeled_img)
+                # This also acts as
+                keyCode = cv2.waitKey(30) & 0xff
+                # Stop the program on the ESC key
+                if keyCode == 27:
+                    break
         else:
             pass
         time.sleep(0.0001)
