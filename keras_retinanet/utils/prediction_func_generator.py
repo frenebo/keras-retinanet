@@ -102,6 +102,9 @@ def generate_prediction_func(
         print("Running TF session on image... ", end="", flush=True)
         start = datetime.datetime.now()
         boxes, scores, labels = model.predict(np.expand_dims(image, axis=0))
+        boxes = boxes[0]
+        scores = scores[0]
+        labels = labels[0]
         # boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
         end = datetime.datetime.now()
         milliseconds = (end - start).total_seconds()*1000
