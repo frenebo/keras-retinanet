@@ -66,9 +66,6 @@ def show_camera():
     parser.add_argument("--output-directory", help="Store to a video file in directory instead of displaying")
     args = parser.parse_args()
 
-    if args.prediction_model.endswith(".h5"):
-        raise TypeError("Model should be a .pb file")
-
     pred_func = generate_prediction_func(
         frozen_graph_filename=args.prediction_model,
         backbone_name=args.backbone,
