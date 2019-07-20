@@ -37,7 +37,8 @@ def load_graph_def(frozen_graph_filename):
     return graph_def
 
 def generate_prediction_func(
-        model_path,
+        # model_path,
+        frozen_graph_filename,
         backbone_name,
         csv_classes_path,
         max_detections=100,
