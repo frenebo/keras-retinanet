@@ -129,6 +129,8 @@ def generate_prediction_func(
 
         scores = scores[0][indices]
         scores_sort = np.argsort(-scores)[:max_detections]
+        print("Scores: ", scores.shape)
+        print("Indices[scores_sort]", indices[scores_sort].shape)
 
         image_boxes      = boxes[0, indices[scores_sort], :]
         image_scores     = scores[scores_sort]
