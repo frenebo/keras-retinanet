@@ -99,16 +99,16 @@ def generate_prediction_func(
         #     "input_1:0": np.expand_dims(image, axis=0)
         # }
 
-        print("Running TF session on image... ", end="", flush=True)
+        print("Running model on image... ", end="", flush=True)
         start = datetime.datetime.now()
         boxes, scores, labels = model.predict(np.expand_dims(image, axis=0))
-        # boxes = boxes[0]
-        # scores = scores[0]
-        # labels = labels[0]
+        boxes = boxes[0]
+        scores = scores[0]
+        labels = labels[0]
         # boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
         end = datetime.datetime.now()
         milliseconds = (end - start).total_seconds()*1000
-        print("Done running tf session on image, took {} milliseconds".format(milliseconds))
+        print("Done running model on image, took {} milliseconds".format(milliseconds))
 
         # boxe values are ordered: x1, y1, x2, y2
 
@@ -118,7 +118,7 @@ def generate_prediction_func(
             boxes[:,:,1] /= y_scale
             boxes[:,:,3] /= y_scale
 
-        print("Extracting predictions from session output... ", end="")
+        print("Extracting predictions from session output... ")
         print("Boxes: ", boxes.shape)
         print("Scores: ", scores.shape)
         print("Labels: ", labels.shape)
