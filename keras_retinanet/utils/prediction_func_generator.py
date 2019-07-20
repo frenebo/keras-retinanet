@@ -102,9 +102,6 @@ def generate_prediction_func(
         print("Running TF session on image... ", end="", flush=True)
         start = datetime.datetime.now()
         boxes, scores, labels = model.predict(np.expand_dims(image, axis=0))
-        print("Boxes: ", boxes.shape)
-        print("Scores: ", scores.shape)
-        print("Labels: ", labels.shape)
         # boxes = boxes[0]
         # scores = scores[0]
         # labels = labels[0]
@@ -112,8 +109,7 @@ def generate_prediction_func(
         end = datetime.datetime.now()
         milliseconds = (end - start).total_seconds()*1000
         print("Done running tf session on image, took {} milliseconds".format(milliseconds))
-        # print("boxes: ", boxes.shape)
-        # print("Example box: ", boxes[0][0])
+
         # boxe values are ordered: x1, y1, x2, y2
 
         if not keep_downsized:
@@ -122,14 +118,14 @@ def generate_prediction_func(
             boxes[:,:,1] /= y_scale
             boxes[:,:,3] /= y_scale
 
-        # print("scores: ", scores.shape)
-        # print("labels: ", labels.shape)
-
         print("Extracting predictions from session output... ", end="")
-        print("Boxes shape: ", boxes.shape)
+        print("Boxes: ", boxes.shape)
+        print("Scores: ", scores.shape)
+        print("Labels: ", labels.shape)
 
         # boxes /= scale
         indices = np.where(scores[0, :] > score_threshold)[0]
+        print("Indices: ", indices.shape)
 
         scores = scores[0][indices]
         scores_sort = np.argsort(-scores)[:max_detections]
