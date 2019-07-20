@@ -2,8 +2,6 @@ import argparse
 import cv2
 import sys
 import os
-import threading
-import time
 import numpy as np
 
 # Allow relative imports when being executed as script.
@@ -15,17 +13,6 @@ if __name__ == "__main__" and __package__ is None:
 from ..utils.prediction_func_generator import generate_prediction_func
 from .predict_video import get_video_dims
 
-#
-# This 'grab_img' function is designed to be run in the sub-thread.
-# Once started, this thread continues to grab new image and put it
-# into the global IMG_HANDLE, until THREAD_RUNNING is set to False.
-#
-def grab_img(cap):
-    global THREAD_RUNNING
-    global IMG_HANDLE
-    while THREAD_RUNNING:
-        _, IMG_HANDLE = cap.read()
-        time.sleep(0.001)
 
 def gstreamer_pipeline(
     capture_width=1280,
@@ -63,7 +50,6 @@ def show_camera():
     parser.add_argument("--backbone", type=str, default="resnet50", help="Backbone name")
     parser.add_argument("--score-threshold", default=0.05, type=float, help="Threshold for displaying a result")
     parser.add_argument("--max-detections", default=100, type=int, help="Maximum number of detections to show")
-    parser.add_argument("--output-directory", help="Store to a video file in directory instead of displaying")
     args = parser.parse_args()
 
     pred_func = generate_prediction_func(
@@ -74,83 +60,33 @@ def show_camera():
         score_threshold=args.score_threshold, # threshold score for showing prediction
         limit_threads=1,
     )
-
-    # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
-    # print(gstreamer_pipeline(flip_method=0))
-
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 
     if not cap.isOpened():
         raise Exception("Could not open capture")
 
-    THREAD_RUNNING = True
+    if cap.isOpened():
+        # window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
+        # Window
+        # while cv2.getWindowProperty('CSI Camera',0) >= 0:
+        while True:
+            _, img = cap.read()
+            print("Predicting image")
+            labeled_img = pred_func(img)
+            print("Done predicting images")
 
-    IMG_HANDLE = None
-    prev_img = None
+            # print("Showing image... ", end="")
+            # cv2.imshow('CSI Camera', labeled_img)
+            # print("Done showing image")
 
-    th = threading.Thread(target=grab_img, args=(cap,))
-    th.start()
+            # keyCode = cv2.waitKey(30) & 0xff
 
+            # if keyCode == 27:
+            #     break
 
-    while True:
-        if "IMG_HANDLE" in globals():
-            if np.array_equal(IMG_HANDLE, prev_img):
-                pass
-            else:
-                prev_img = IMG_HANDLE
-                labeled_img = pred_func(IMG_HANDLE)
-                cv2.imshow("CSI Camera", labeled_img)
-                # This also acts as
-                keyCode = cv2.waitKey(30) & 0xff
-                # Stop the program on the ESC key
-                if keyCode == 27:
-                    break
-        else:
-            pass
-        time.sleep(0.0001)
-
-    THREAD_RUNNING = False
-    th.join()
-
-    # if args.output_directory is not None:
-    #     fourcc = cv2.VideoWriter_fourcc(*"MJPG")
-    #     framerate = 1.0 # arbitrary
-    #     output_video = cv2.VideoWriter(
-    #         os.path.join(args.output_directory, "camera_output.avi"),
-    #         fourcc,
-    #         framerate,
-    #         get_video_dims(cap)
-    #     )
-
-    # if cap.isOpened():
-    #     if args.output_directory is None:
-    #         window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
-    #         # Window
-    #         while cv2.getWindowProperty('CSI Camera',0) >= 0:
-    #             _, img = cap.read()
-
-    #             labeled_img = pred_func(img)
-
-    #             print("Showing image... ", end="")
-    #             cv2.imshow('CSI Camera', labeled_img)
-    #             print("Done showing image")
-
-    #             keyCode = cv2.waitKey(30) & 0xff
-
-    #             if keyCode == 27:
-    #                 break
-    #     else:
-    #         try:
-    #             while True:
-    #                 _, img = cap.read()
-    #                 with_detections = pred_func(img)
-    #                 output_video.write(with_detections)
-    #         except KeyboardInterrupt:
-    #             output_video.release()
-
-    #     cap.release()
-    #     cv2.destroyAllWindows()
-    # else:
+        cap.release()
+        cv2.destroyAllWindows()
+    else:
     #     print('Unable to open camera')
 
 
