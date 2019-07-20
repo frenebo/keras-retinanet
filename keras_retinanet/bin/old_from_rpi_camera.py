@@ -40,9 +40,6 @@ def gstreamer_pipeline(
     )
 
 def show_camera():
-    global THREAD_RUNNING
-    global IMG_HANDLE
-
     parser = argparse.ArgumentParser(description='Predict Camera input')
     parser.add_argument("prediction_model", type=str, help="Path to TensorRT prediction model")
     # parser.add_argument("")
