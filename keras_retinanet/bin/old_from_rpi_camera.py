@@ -87,7 +87,7 @@ def show_camera():
         cap.release()
         cv2.destroyAllWindows()
     else:
-    #     print('Unable to open camera')
+        print('Unable to open camera')
 
 
 if __name__ == '__main__':
