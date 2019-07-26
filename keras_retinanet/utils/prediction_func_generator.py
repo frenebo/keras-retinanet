@@ -70,7 +70,7 @@ def generate_prediction_func(
     tf.import_graph_def(graph_def, name='')
     print("Done importing graph_definition ", end="")
 
-    # preprocess_image = models.backbone(backbone_name).preprocess_image
+    preprocess_image = models.backbone(backbone_name).preprocess_image
     label_to_name = csv_label_to_name_func(csv_classes_path)
 
     print("Getting graph output tensors... ", end="")
