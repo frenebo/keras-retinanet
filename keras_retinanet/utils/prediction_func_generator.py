@@ -46,38 +46,38 @@ def generate_prediction_func(
         limit_threads=None, # Either none or a number of threads
     ):
 
-    # print("Loading graph definition... ", end="")
-    # graph_def = load_graph_def(frozen_graph_filename)
-    # print("Done loading graph definition")
+    print("Loading graph definition... ", end="")
+    graph_def = load_graph_def(frozen_graph_filename)
+    print("Done loading graph definition")
 
-    # print("Creating TF session... ", end="")
-    # if limit_threads is None:
-    #     thread_args = {}
-    # else:
-    #     thread_args = {
-    #         "intra_op_parallelism_threads": limit_threads,
-    #         "inter_op_parallelism_threads": limit_threads,
-    #     }
-    # tf_config = tf.ConfigProto(
-    #     log_device_placement=True,
-    #     **thread_args,
-    # )
-    # tf_config.gpu_options.allow_growth = True
-    # tf_sess = tf.Session(config=tf_config)
-    # print("Done creating TF session")
+    print("Creating TF session... ", end="")
+    if limit_threads is None:
+        thread_args = {}
+    else:
+        thread_args = {
+            "intra_op_parallelism_threads": limit_threads,
+            "inter_op_parallelism_threads": limit_threads,
+        }
+    tf_config = tf.ConfigProto(
+        log_device_placement=True,
+        **thread_args,
+    )
+    tf_config.gpu_options.allow_growth = True
+    tf_sess = tf.Session(config=tf_config)
+    print("Done creating TF session")
 
-    # print("Importing graph definition... ", end="")
-    # tf.import_graph_def(graph_def, name='')
-    # print("Done importing graph_definition ", end="")
+    print("Importing graph definition... ", end="")
+    tf.import_graph_def(graph_def, name='')
+    print("Done importing graph_definition ", end="")
 
-    preprocess_image = models.backbone(backbone_name).preprocess_image
+    # preprocess_image = models.backbone(backbone_name).preprocess_image
     label_to_name = csv_label_to_name_func(csv_classes_path)
 
-    # print("Getting graph output tensors... ", end="")
-    # boxes_tensor = tf_sess.graph.get_tensor_by_name("ident_boxes/Identity:0")
-    # scores_tensor = tf_sess.graph.get_tensor_by_name("ident_scores/Identity:0")
-    # labels_tensor = tf_sess.graph.get_tensor_by_name("ident_labels/Identity:0")
-    # print("Done getting graph output tensors")
+    print("Getting graph output tensors... ", end="")
+    boxes_tensor = tf_sess.graph.get_tensor_by_name("ident_boxes/Identity:0")
+    scores_tensor = tf_sess.graph.get_tensor_by_name("ident_scores/Identity:0")
+    labels_tensor = tf_sess.graph.get_tensor_by_name("ident_labels/Identity:0")
+    print("Done getting graph output tensors")
 
     model = models.load_model(model_path, backbone_name=backbone_name)
     bbox_model = models.convert_model(model)
@@ -96,17 +96,17 @@ def generate_prediction_func(
 
         print("Done preprocessing image")
 
-        # feed_dict = {
-        #     "input_1:0": np.expand_dims(image, axis=0)
-        # }
+        feed_dict = {
+            "input_1:0": np.expand_dims(image, axis=0)
+        }
 
         print("Running model on image... ", end="", flush=True)
         start = datetime.datetime.now()
-        boxes, scores, labels = bbox_model.predict(np.expand_dims(image, axis=0))
+        # boxes, scores, labels = bbox_model.predict(np.expand_dims(image, axis=0))
         # boxes = boxes[0]
         # scores = scores[0]
         # labels = labels[0]
-        # boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
+        boxes, scores, labels = tf_sess.run([boxes_tensor, scores_tensor, labels_tensor], feed_dict)
         end = datetime.datetime.now()
         milliseconds = (end - start).total_seconds()*1000
         print("Done running model on image, took {} milliseconds".format(milliseconds))
