@@ -79,8 +79,8 @@ def generate_prediction_func(
     labels_tensor = tf_sess.graph.get_tensor_by_name("ident_labels/Identity:0")
     print("Done getting graph output tensors")
 
-    model = models.load_model(model_path, backbone_name=backbone_name)
-    bbox_model = models.convert_model(model)
+    # model = models.load_model(model_path, backbone_name=backbone_name)
+    # bbox_model = models.convert_model(model)
 
 
     def pred_func(raw_image):
