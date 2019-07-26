@@ -63,23 +63,23 @@ def show_camera():
         raise Exception("Could not open capture")
 
     if cap.isOpened():
-        # window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
+        window_handle = cv2.namedWindow('CSI Camera', cv2.WINDOW_AUTOSIZE)
         # Window
-        # while cv2.getWindowProperty('CSI Camera',0) >= 0:
-        while True:
+        while cv2.getWindowProperty('CSI Camera',0) >= 0:
+        # while True:
             _, img = cap.read()
             print("Predicting image")
             labeled_img = pred_func(img)
             print("Done predicting images")
 
             # print("Showing image... ", end="")
-            # cv2.imshow('CSI Camera', labeled_img)
+            cv2.imshow('CSI Camera', labeled_img)
             # print("Done showing image")
 
-            # keyCode = cv2.waitKey(30) & 0xff
+            keyCode = cv2.waitKey(30) & 0xff
 
-            # if keyCode == 27:
-            #     break
+            if keyCode == 27:
+                break
 
         cap.release()
         cv2.destroyAllWindows()
